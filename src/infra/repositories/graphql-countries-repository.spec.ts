@@ -33,4 +33,12 @@ describe("GraphqlCountriesRepository", () => {
     const result = await sut.loadAll();
     expect(result).toBeNull();
   });
+  it("should throws if apollo.query throws", () => {
+    const sut = sutFactory();
+    jest
+      .spyOn(ApolloClient.prototype, "query")
+      .mockRejectedValueOnce(new Error());
+    const result = sut.loadAll();
+    expect(result).rejects.toThrow(new Error());
+  });
 });
