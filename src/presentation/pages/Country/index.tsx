@@ -19,56 +19,77 @@ type Props = {
   showCountry: ShowCountry;
 };
 
+type Country = ShowCountry.Result;
+
 const Country: React.FC<Props> = ({ showCountry }) => {
-  const [loading] = useState<boolean>(true);
+  const [country, setCountry] = useState<Country>();
+  const [loading, setLoading] = useState<boolean>(true);
   const { countryId } = useParams();
 
   useEffect(() => {
     async function loadCountry() {
-      await showCountry.find(countryId);
+      const queryResult = await showCountry.find(countryId);
+      setCountry(queryResult);
+      setLoading(false);
     }
     loadCountry();
   }, [countryId, showCountry]);
+
+  const formatNum = (num: number): string =>
+    new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
 
   return (
     <Container>
       {loading ? (
         <CountrySkeleton />
       ) : (
-        <Card>
-          <CardMedia
-            component="img"
-            image="https://restcountries.eu/data/ala.svg"
-            height="260"
-          />
+        <Card data-testid="country-container">
+          <CardMedia component="img" image={country.flag} height="260" />
           <CardContent>
-            <Typography gutterBottom variant="h3" component="h3">
-              Brasil
+            <Typography
+              data-testid="country-name"
+              gutterBottom
+              variant="h3"
+              component="h3"
+            >
+              {country.name}
             </Typography>
             <List component="nav" aria-label="main mailbox folders">
               <ListItem button>
                 <ListItemIcon>
                   <CenterFocusStrongOutlined />
                 </ListItemIcon>
-                <ListItemText primary={`Capital: Buenos Aires`} />
+                <ListItemText
+                  data-testid="capital"
+                  primary={`Capital: ${country.capital}`}
+                />
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
                   <PeopleOutlined />
                 </ListItemIcon>
-                <ListItemText primary={`População: 500 milhoes`} />
+                <ListItemText
+                  data-testid="population"
+                  primary={`População: ${formatNum(country.population)}`}
+                />
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
                   <AspectRatio />
                 </ListItemIcon>
-                <ListItemText primary={`Área: 500 m²`} />
+                <ListItemText
+                  data-testid="area"
+                  primary={`Área: ${formatNum(country.area)} m²`}
+                />
               </ListItem>
               <ListItem button>
                 <ListItemIcon>
                   <LanguageOutlined />
                 </ListItemIcon>
-                <ListItemText primary={`Domínio de topo: .br`} />
+                <ListItemText
+                  data-testid="top-level"
+                  primary={`Domínio de topo: ${country.topLevelDomain}`}
+                />
               </ListItem>
             </List>
           </CardContent>
