@@ -3,9 +3,12 @@ import { GraphqlCountriesRepository } from "./graphql-countries-repository";
 
 jest.mock("@apollo/client");
 
+const sutFactory = (): GraphqlCountriesRepository =>
+  new GraphqlCountriesRepository();
+
 describe("GraphqlCountriesRepository", () => {
   it("should calls apollo.query with correct data", async () => {
-    const sut = new GraphqlCountriesRepository();
+    const sut = sutFactory();
     const query = gql`
       {
         Country {
