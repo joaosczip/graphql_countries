@@ -41,7 +41,13 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
-        <CountriesContainer data-testid="countries-container">
+        <CountriesContainer
+          data-testid="countries-container"
+          dataLength={countries.length}
+          next={updateCountriesList}
+          hasMore={true}
+          loader={<h1>Carregando...</h1>}
+        >
           {countries
             ? countries.map((country) => (
                 <CountryCard key={country.id} {...country} />
