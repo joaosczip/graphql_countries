@@ -61,6 +61,13 @@ describe("Home", () => {
     );
     expect(await screen.findByTestId("reload")).toBeInTheDocument();
   });
+  it("should display nothing on countries is empty", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    loadCountriesSpy.countries = [];
+    sutFactory(loadCountriesSpy);
+    const container = await screen.findByTestId("countries-container");
+    expect(container.children).toHaveLength(0);
+  });
   it("should calls LoadCountries on reload button click", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     const error = new Error("Error loading countries");

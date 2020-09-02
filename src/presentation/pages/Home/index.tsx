@@ -48,11 +48,10 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           loader={!error && <h1>Carregando...</h1>}
         >
           <div data-testid="countries-container">
-            {countries
-              ? countries.map((country) => (
-                  <CountryCard key={country.id} {...country} />
-                ))
-              : null}
+            {countries &&
+              countries.map((country) => (
+                <CountryCard key={country.id} {...country} />
+              ))}
           </div>
         </CountriesContainer>
         {error && (
