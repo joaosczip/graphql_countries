@@ -9,18 +9,23 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({ loadCountries }) => {
-  const [countries] = useState<BasicCountry[]>([]);
+  const [countries, setCountries] = useState<BasicCountry[]>([]);
 
   useEffect(() => {
-    loadCountries.load({
-      offset: 0,
-      limit: 12,
-    });
+    loadCountries
+      .load({
+        offset: 0,
+        limit: 12,
+      })
+      .then((countriesResult) => {
+        setCountries(countriesResult);
+      })
+      .catch(console.log);
   }, [loadCountries]);
 
   return (
     <div style={{ position: "relative" }}>
-      <Container>
+      <Container data-testid="container">
         {countries &&
           countries.map((country) => (
             <CountryCard key={country.id} {...country} />

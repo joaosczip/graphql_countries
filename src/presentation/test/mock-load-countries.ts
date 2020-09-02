@@ -8,6 +8,6 @@ export class LoadCountriesSpy implements LoadCountries {
   async load(params: LoadCountries.Params): Promise<LoadCountries.Result> {
     this.callsCount++;
     this.params = params;
-    return Promise.resolve(this.countries);
+    return this.countries;
   }
 }

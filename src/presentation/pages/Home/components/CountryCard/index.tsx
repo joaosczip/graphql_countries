@@ -13,17 +13,17 @@ import { Container } from "./styles";
 
 type Props = BasicCountry;
 
-const CountryCard: React.FC<Props> = ({ name, capital }) => {
+const CountryCard: React.FC<Props> = ({ name, capital, flag }) => {
   return (
     <Container>
       <Card>
         <CardActionArea>
           <CardMedia
             component="img"
-            alt="Contemplative Reptile"
+            alt={`${name} flag`}
             height="140"
-            image="https://i.pinimg.com/originals/43/61/ce/4361ce8cd3b72490e39e1d9ed4693f5f.jpg"
-            title="Contemplative Reptile"
+            image={flag}
+            title={name}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
