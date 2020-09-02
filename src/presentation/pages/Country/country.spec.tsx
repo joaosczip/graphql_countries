@@ -38,4 +38,36 @@ describe("Country", () => {
     });
     expect(showCountrySpy.countryId).toEqual(fakeCountryId);
   });
+  it("should hide the skeleton and present the correct country values", async () => {
+    const { showCountrySpy } = sutFactory();
+    const countryContainer = await screen.findByTestId("country-container");
+    expect(countryContainer).toBeInTheDocument();
+
+    const formatNum = (num) =>
+      new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
+
+    expect(countryContainer.querySelector("img")).toHaveAttribute(
+      "src",
+      showCountrySpy.country.flag
+    );
+    expect(screen.getByTestId("country-name")).toHaveTextContent(
+      showCountrySpy.country.name
+    );
+    expect(
+      screen.getByTestId("capital").querySelector("span")
+    ).toHaveTextContent(`Capital: ${showCountrySpy.country.capital}`);
+    expect(
+      screen.getByTestId("population").querySelector("span")
+    ).toHaveTextContent(
+      `População: ${formatNum(showCountrySpy.country.population)}`
+    );
+    expect(screen.getByTestId("area").querySelector("span")).toHaveTextContent(
+      `Área: ${formatNum(showCountrySpy.country.area)} m²`
+    );
+    expect(
+      screen.getByTestId("top-level").querySelector("span")
+    ).toHaveTextContent(
+      `Domínio de topo: ${showCountrySpy.country.topLevelDomain}`
+    );
+  });
 });
