@@ -38,6 +38,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
         {error && (
           <div data-testid="error-container">
             <span data-testid="error-message">{error.message}</span>
+            <button data-testid="reload">Tentar novamente</button>
           </div>
         )}
       </Container>

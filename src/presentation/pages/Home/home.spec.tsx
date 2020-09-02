@@ -60,5 +60,6 @@ describe("Home", () => {
     expect(await screen.findByTestId("error-message")).toHaveTextContent(
       error.message
     );
+    expect(await screen.findByTestId("reload")).toBeInTheDocument();
   });
 });
