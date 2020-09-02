@@ -1,12 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Home from "./presentation/pages/Home";
-import GlobalStyles from "./presentation/styles/global";
+import Route from "@/main/routes/route";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Home />
-    <GlobalStyles />
+    <Route />
   </React.StrictMode>,
   document.getElementById("root")
 );
