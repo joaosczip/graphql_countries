@@ -1,18 +1,23 @@
 import { RemoteLoadCountries } from "./remote-load-countries";
-import { LoadCountriesRepository } from "@/data/protocols";
+import { LoadCountriesRepositorySpy } from "@/data/test";
 
-class LoadCountriesRepositorySpy implements LoadCountriesRepository {
-  callsCount = 0;
-  async loadAll(): Promise<LoadCountriesRepository.Result> {
-    this.callsCount++;
-    return null;
-  }
-}
+type Sut = {
+  sut: RemoteLoadCountries;
+  loadCountriesRepositorySpy: LoadCountriesRepositorySpy;
+};
+
+const sutFactory = (): Sut => {
+  const loadCountriesRepositorySpy = new LoadCountriesRepositorySpy();
+  const sut = new RemoteLoadCountries(loadCountriesRepositorySpy);
+  return {
+    sut,
+    loadCountriesRepositorySpy,
+  };
+};
 
 describe("RemoteLoadCountries", () => {
   it("should calls the LoadCountriesRepository", async () => {
-    const loadCountriesRepositorySpy = new LoadCountriesRepositorySpy();
-    const sut = new RemoteLoadCountries(loadCountriesRepositorySpy);
+    const { sut, loadCountriesRepositorySpy } = sutFactory();
     await sut.load();
     expect(loadCountriesRepositorySpy.callsCount).toBe(1);
   });
