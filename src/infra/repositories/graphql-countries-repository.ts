@@ -8,7 +8,7 @@ export class GraphqlCountriesRepository implements LoadCountriesRepository {
   constructor() {
     this.client = new ApolloClient({
       link: new HttpLink({
-        uri: process.env.API_URI,
+        uri: process.env.REACT_APP_API_URI,
         fetch,
       }),
       cache: new InMemoryCache(),
