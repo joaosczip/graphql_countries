@@ -9,9 +9,11 @@ export class RemoteLoadCountries implements LoadCountries {
 
   async load(): Promise<LoadCountries.Result> {
     const countries = await this.loadCountriesRepository.loadAll();
+
     if (!countries) {
       throw new CountriesNotFoundError();
     }
-    return null;
+
+    return countries;
   }
 }
