@@ -23,6 +23,11 @@ describe("Home", () => {
       limit: 12,
     });
   });
+  it("should shows spinner on loading", async () => {
+    sutFactory();
+    const spinner = await screen.findByTestId("spinner");
+    expect(spinner).toBeInTheDocument();
+  });
   it("should renders the correct countries", async () => {
     const { loadCountriesSpy } = sutFactory();
     const container = await screen.findByTestId("countries-container");
