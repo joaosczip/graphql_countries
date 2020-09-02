@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
 
@@ -71,5 +71,14 @@ describe("Home", () => {
     const reloadButton = await screen.findByTestId("reload");
     reloadButton.click();
     expect(loadCountriesSpy.callsCount).toBe(1);
+  });
+  it("should calls LoadCountries with different offset on scroll", async () => {
+    const { loadCountriesSpy } = sutFactory();
+    fireEvent.scroll(window, { y: 1000 });
+    await screen.findByTestId("countries-container");
+    expect(loadCountriesSpy.callsCount).toBe(2);
+    expect(loadCountriesSpy.params).toEqual({
+      offset: 12,
+    });
   });
 });
