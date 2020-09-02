@@ -40,4 +40,9 @@ describe("RemoteShowCountry", () => {
     const result = sut.find(countryId);
     expect(result).rejects.toThrow(new CountryNotFoundError(countryId));
   });
+  it("should returns the correct country on success", async () => {
+    const { sut, loadCountryByIdRepositorySpy } = sutFactory();
+    const result = await sut.find(faker.random.number());
+    expect(result).toEqual(loadCountryByIdRepositorySpy.country);
+  });
 });
