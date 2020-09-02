@@ -1,6 +1,8 @@
+import faker from "faker";
 import { RemoteLoadCountries } from "./remote-load-countries";
 import { LoadCountriesRepositorySpy } from "@/data/test";
 import { CountriesNotFoundError } from "@/domain/errors";
+import { LoadCountries } from "@/domain/usecases";
 
 type Sut = {
   sut: RemoteLoadCountries;
@@ -16,29 +18,38 @@ const sutFactory = (): Sut => {
   };
 };
 
+const makeFakeParams = (): LoadCountries.Params => ({
+  offset: faker.random.number(),
+});
+
 describe("RemoteLoadCountries", () => {
-  it("should calls the LoadCountriesRepository", async () => {
+  it("should calls the LoadCountriesRepository with correct values", async () => {
     const { sut, loadCountriesRepositorySpy } = sutFactory();
-    await sut.load();
+    const params = makeFakeParams();
+    await sut.load(params);
     expect(loadCountriesRepositorySpy.callsCount).toBe(1);
+    expect(loadCountriesRepositorySpy.params).toEqual({
+      ...params,
+      limit: 12,
+    });
   });
   it("should throws if LoadCountriesRepository throws", () => {
     const { sut, loadCountriesRepositorySpy } = sutFactory();
     jest
       .spyOn(loadCountriesRepositorySpy, "loadAll")
       .mockRejectedValueOnce(new Error());
-    const result = sut.load();
+    const result = sut.load(makeFakeParams());
     expect(result).rejects.toThrow(new Error());
   });
   it("should throws CountriesNotFoundError if LoadCountriesRepository returns null", () => {
     const { sut, loadCountriesRepositorySpy } = sutFactory();
     loadCountriesRepositorySpy.countries = null;
-    const result = sut.load();
+    const result = sut.load(makeFakeParams());
     expect(result).rejects.toThrow(new CountriesNotFoundError());
   });
   it("should returns the countries on success", async () => {
     const { sut, loadCountriesRepositorySpy } = sutFactory();
-    const result = await sut.load();
+    const result = await sut.load(makeFakeParams());
     expect(result).toEqual(loadCountriesRepositorySpy.countries);
   });
 });
