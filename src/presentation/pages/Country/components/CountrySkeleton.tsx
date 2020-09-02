@@ -5,7 +5,7 @@ import { Title, InfoList } from "./styles";
 
 const CountrySkeleton: React.FC = () => {
   return (
-    <div>
+    <div data-testid="country-skeleton">
       <Card>
         <Skeleton height={260} animation="wave" variant="rect" />
         <CardContent>
