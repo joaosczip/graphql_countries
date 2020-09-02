@@ -160,7 +160,7 @@ describe("GraphqlCountriesRepository", () => {
       await sut.load(countryId);
       expect(querySpy).toHaveBeenCalledWith({ query });
     });
-    it.only("should throws UnexpectedError if apollo.client throws", () => {
+    it("should throws UnexpectedError if apollo.client throws", () => {
       const sut = sutFactory();
       const countryId = faker.random.number();
       jest
@@ -168,6 +168,16 @@ describe("GraphqlCountriesRepository", () => {
         .mockRejectedValueOnce(new Error());
       const result = sut.load(countryId);
       expect(result).rejects.toThrow(new UnexpectedError());
+    });
+    it("should returns null if apollo.client returns empty", async () => {
+      const sut = sutFactory();
+      jest.spyOn(ApolloClient.prototype, "query").mockResolvedValueOnce({
+        data: {
+          Country: [],
+        },
+      } as ApolloQueryResult<any>);
+      const result = await sut.load(faker.random.number());
+      expect(result).toBeNull();
     });
   });
 });
