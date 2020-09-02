@@ -21,4 +21,12 @@ describe("RemoteLoadCountries", () => {
     await sut.load();
     expect(loadCountriesRepositorySpy.callsCount).toBe(1);
   });
+  it("should throws if LoadCountriesRepository throws", () => {
+    const { sut, loadCountriesRepositorySpy } = sutFactory();
+    jest
+      .spyOn(loadCountriesRepositorySpy, "loadAll")
+      .mockRejectedValueOnce(new Error());
+    const result = sut.load();
+    expect(result).rejects.toThrow(new Error());
+  });
 });
