@@ -11,18 +11,28 @@ type Props = {
 const Home: React.FC<Props> = ({ loadCountries }) => {
   const [countries, setCountries] = useState<BasicCountry[]>();
   const [error, setError] = useState<Error>();
+  const [defaultLimit] = useState<number>(12);
+  const [queryOffset, setQueryOffset] = useState<number>(0);
 
-  const handleLoadCountries = useCallback(async () => {
-    try {
-      const countriesResult = await loadCountries.load({
-        offset: 0,
-        limit: 12,
-      });
-      setCountries(countriesResult);
-    } catch (error) {
-      setError(error);
-    }
-  }, [loadCountries]);
+  const handleLoadCountries = useCallback(
+    async (offset = queryOffset) => {
+      try {
+        const countriesResult = await loadCountries.load({
+          offset,
+        });
+        setCountries(countriesResult);
+      } catch (error) {
+        setError(error);
+      }
+    },
+    [loadCountries, queryOffset]
+  );
+
+  const updateCountriesList = useCallback(async () => {
+    const newOffset = queryOffset + defaultLimit;
+    await handleLoadCountries(newOffset);
+    setQueryOffset(newOffset);
+  }, [handleLoadCountries, queryOffset, defaultLimit]);
 
   useEffect(() => {
     handleLoadCountries();
@@ -31,11 +41,13 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
-        {countries
-          ? countries.map((country) => (
-              <CountryCard key={country.id} {...country} />
-            ))
-          : null}
+        <div data-testid="countries-container">
+          {countries
+            ? countries.map((country) => (
+                <CountryCard key={country.id} {...country} />
+              ))
+            : null}
+        </div>
         {error && (
           <div data-testid="error-container">
             <span data-testid="error-message">{error.message}</span>
@@ -44,6 +56,9 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
             </button>
           </div>
         )}
+        <button onClick={updateCountriesList} data-testid="load-more">
+          Carregar mais
+        </button>
       </Container>
     </div>
   );
