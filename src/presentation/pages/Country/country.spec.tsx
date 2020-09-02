@@ -12,17 +12,27 @@ jest.mock("react-router-dom", () => ({
   useParams: () => ({ countryId: fakeCountryId }),
 }));
 
+type Sut = {
+  showCountrySpy: ShowCountrySpy;
+};
+
+const history = createMemoryHistory({
+  initialEntries: [`/country/${fakeCountryId}`],
+});
+const sutFactory = (): Sut => {
+  const showCountrySpy = new ShowCountrySpy();
+  render(
+    <Router history={history}>
+      <Country showCountry={showCountrySpy} />
+    </Router>
+  );
+
+  return { showCountrySpy };
+};
+
 describe("Country", () => {
   it("should shows country skeleton and calls ShowCountry on load with correct id", async () => {
-    const showCountrySpy = new ShowCountrySpy();
-    const history = createMemoryHistory({
-      initialEntries: [`/country/${fakeCountryId}`],
-    });
-    render(
-      <Router history={history}>
-        <Country showCountry={showCountrySpy} />
-      </Router>
-    );
+    const { showCountrySpy } = sutFactory();
     await waitFor(() => {
       expect(screen.queryByTestId("country-skeleton")).toBeInTheDocument();
     });
