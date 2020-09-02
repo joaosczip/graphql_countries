@@ -15,10 +15,12 @@ export class GraphqlCountriesRepository implements LoadCountriesRepository {
     });
   }
 
-  async loadAll(): Promise<LoadCountriesRepository.Result> {
+  async loadAll(
+    params: LoadCountriesRepository.Params
+  ): Promise<LoadCountriesRepository.Result> {
     const query = gql`
       {
-        Country {
+        Country(first: ${params.limit}, offset: ${params.offset}) {
           _id
           name
           capital
