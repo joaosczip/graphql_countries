@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
+import Spinner from "@/presentation/components/Spinner";
 import { Container, CountriesContainer } from "./styles";
 
 type Props = {
@@ -46,7 +47,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           dataLength={countries.length}
           next={updateCountriesList}
           hasMore={true}
-          loader={!error && <h1>Carregando...</h1>}
+          loader={!error && <Spinner />}
         >
           <div data-testid="countries-container">
             {countries &&
