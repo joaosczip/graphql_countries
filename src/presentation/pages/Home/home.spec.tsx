@@ -23,9 +23,9 @@ describe("Home", () => {
       limit: 12,
     });
   });
-  it("should shows spinner on loading", async () => {
+  it("should shows the cards skeleton on loading", async () => {
     sutFactory();
-    const spinner = await screen.findByTestId("spinner");
+    const spinner = await screen.findByTestId("skeleton");
     expect(spinner).toBeInTheDocument();
   });
   it("should renders the correct countries", async () => {

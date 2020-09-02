@@ -8,6 +8,8 @@ export const Container = styled.div`
 `;
 
 export const CountriesContainer = styled(InfiniteScroll)`
-  display: flex;
-  flex-wrap: wrap;
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+  }
 `;
