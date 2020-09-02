@@ -1,8 +1,12 @@
 import fetch from "cross-fetch";
 import { ApolloClient, InMemoryCache, gql, HttpLink } from "@apollo/client";
-import { LoadCountriesRepository } from "@/data/protocols";
+import {
+  LoadCountriesRepository,
+  LoadCountryByIdRepository,
+} from "@/data/protocols";
 
-export class GraphqlCountriesRepository implements LoadCountriesRepository {
+export class GraphqlCountriesRepository
+  implements LoadCountriesRepository, LoadCountryByIdRepository {
   private client: ApolloClient<any>;
 
   constructor() {
@@ -45,5 +49,26 @@ export class GraphqlCountriesRepository implements LoadCountriesRepository {
       capital,
       flag: flag.svgFile,
     }));
+  }
+
+  async load(countryId: number): Promise<LoadCountryByIdRepository.Result> {
+    const query = gql`
+    {
+      Country(_id: ${countryId}) {
+        name
+        area
+        population
+        capital
+        flag {
+          svgFile
+        }
+        topLevelDomains {
+          name
+        }
+      }
+    }
+  `;
+    await this.client.query({ query });
+    return null;
   }
 }
