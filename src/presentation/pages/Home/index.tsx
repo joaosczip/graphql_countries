@@ -1,11 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BasicCountry } from "@/domain/models";
-
-import { Container } from "./styles";
+import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
+import { Container } from "./styles";
 
-const Home: React.FC = () => {
+type Props = {
+  loadCountries: LoadCountries;
+};
+
+const Home: React.FC<Props> = ({ loadCountries }) => {
   const [countries] = useState<BasicCountry[]>([]);
+
+  useEffect(() => {
+    loadCountries.load({
+      offset: 0,
+      limit: 12,
+    });
+  }, [loadCountries]);
 
   return (
     <div style={{ position: "relative" }}>
