@@ -1,5 +1,6 @@
 import { LoadCountries } from "@/domain/usecases";
 import { LoadCountriesRepository } from "@/data/protocols";
+import { CountriesNotFoundError } from "@/domain/errors";
 
 export class RemoteLoadCountries implements LoadCountries {
   constructor(
@@ -7,7 +8,10 @@ export class RemoteLoadCountries implements LoadCountries {
   ) {}
 
   async load(): Promise<LoadCountries.Result> {
-    await this.loadCountriesRepository.loadAll();
+    const countries = await this.loadCountriesRepository.loadAll();
+    if (!countries) {
+      throw new CountriesNotFoundError();
+    }
     return null;
   }
 }

@@ -88,6 +88,8 @@
     ]
   },
   "devDependencies": {
+    "@types/faker": "^4.1.12",
+    "faker": "^5.1.0",
     "git-commit-msg-linter": "^2.5.3",
     "ts-jest": "^26.3.0"
   },
