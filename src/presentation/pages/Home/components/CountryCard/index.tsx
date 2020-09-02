@@ -16,12 +16,11 @@ type Props = BasicCountry;
 
 const CountryCard: React.FC<Props> = ({ id, name, capital, flag }) => {
   const history = useHistory();
-  const redirectToCountryPage = () => history.replace(`/country/${id}`);
-
+  const redirectToCountryPage = () => history.push(`/country/${id}`);
   return (
     <Container>
       <Card>
-        <CardActionArea>
+        <CardActionArea onClick={redirectToCountryPage}>
           <CardMedia
             component="img"
             alt={`${name} flag`}

@@ -37,8 +37,10 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   }, [queryOffset, defaultLimit, handleLoadCountries]);
 
   useEffect(() => {
-    handleLoadCountries();
-  }, [handleLoadCountries]);
+    if (!countries.length) {
+      handleLoadCountries();
+    }
+  }, [handleLoadCountries, countries.length]);
 
   return (
     <div style={{ position: "relative" }}>
