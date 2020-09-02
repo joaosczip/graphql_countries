@@ -28,7 +28,20 @@ export class GraphqlCountriesRepository implements LoadCountriesRepository {
         }
       }
     `;
-    await this.client.query({ query });
-    return null;
+
+    const countriesResult = await this.client.query({
+      query,
+    });
+
+    if (!countriesResult.data.length) {
+      return null;
+    }
+
+    return countriesResult.data.map(({ id, name, capital, flag }) => ({
+      id,
+      name,
+      capital,
+      flag: flag.svgFile,
+    }));
   }
 }
