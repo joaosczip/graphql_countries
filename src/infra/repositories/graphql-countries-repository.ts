@@ -4,6 +4,7 @@ import {
   LoadCountriesRepository,
   LoadCountryByIdRepository,
 } from "@/data/protocols";
+import { UnexpectedError } from "@/domain/errors";
 
 export class GraphqlCountriesRepository
   implements LoadCountriesRepository, LoadCountryByIdRepository {
@@ -52,23 +53,28 @@ export class GraphqlCountriesRepository
   }
 
   async load(countryId: number): Promise<LoadCountryByIdRepository.Result> {
-    const query = gql`
-    {
-      Country(_id: ${countryId}) {
-        name
-        area
-        population
-        capital
-        flag {
-          svgFile
+    try {
+      const query = gql`
+        {
+          Country(_id: ${countryId}) {
+            name
+            area
+            population
+            capital
+            flag {
+              svgFile
+            }
+            topLevelDomains {
+              name
+            }
+          }
         }
-        topLevelDomains {
-          name
-        }
-      }
+      `;
+
+      await this.client.query({ query });
+      return null;
+    } catch {
+      throw new UnexpectedError();
     }
-  `;
-    await this.client.query({ query });
-    return null;
   }
 }
