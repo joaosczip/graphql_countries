@@ -1,6 +1,7 @@
 import faker from "faker";
 import { RemoteShowCountry } from "./remote-show-country";
 import { LoadCountryByIdRepositorySpy } from "@/data/test";
+import { CountryNotFoundError } from "@/domain/errors";
 
 type Sut = {
   sut: RemoteShowCountry;
@@ -31,5 +32,12 @@ describe("RemoteShowCountry", () => {
       .mockRejectedValueOnce(new Error());
     const result = sut.find(faker.random.number());
     expect(result).rejects.toThrow(new Error());
+  });
+  it("should throws if CountryNotFoundError if LoadCountryByIdRepository returns null", () => {
+    const { sut, loadCountryByIdRepositorySpy } = sutFactory();
+    loadCountryByIdRepositorySpy.country = null;
+    const countryId = faker.random.number();
+    const result = sut.find(countryId);
+    expect(result).rejects.toThrow(new CountryNotFoundError(countryId));
   });
 });
