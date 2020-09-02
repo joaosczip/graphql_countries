@@ -36,4 +36,9 @@ describe("RemoteLoadCountries", () => {
     const result = sut.load();
     expect(result).rejects.toThrow(new CountriesNotFoundError());
   });
+  it("should returns the countries on success", async () => {
+    const { sut, loadCountriesRepositorySpy } = sutFactory();
+    const result = await sut.load();
+    expect(result).toEqual(loadCountriesRepositorySpy.countries);
+  });
 });
