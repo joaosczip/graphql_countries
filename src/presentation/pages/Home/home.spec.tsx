@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
 
@@ -20,12 +20,11 @@ describe("Home", () => {
     expect(loadCountriesSpy.callsCount).toBe(1);
     expect(loadCountriesSpy.params).toEqual({
       offset: 0,
-      limit: 12,
     });
   });
   it("should renders the correct countries", async () => {
     const { loadCountriesSpy } = sutFactory();
-    const container = await screen.findByTestId("container");
+    const container = await screen.findByTestId("countries-container");
     expect(container.children).toHaveLength(loadCountriesSpy.countries.length);
 
     const firstCountryElement = container.children[0];
@@ -53,8 +52,8 @@ describe("Home", () => {
 
     sutFactory(loadCountriesSpy);
 
-    const container = await screen.findByTestId("container");
-    expect(container.children).toHaveLength(1);
+    const container = await screen.findByTestId("countries-container");
+    expect(container.children).toHaveLength(0);
 
     expect(await screen.findByTestId("error-container")).toBeInTheDocument();
     expect(await screen.findByTestId("error-message")).toHaveTextContent(
@@ -72,5 +71,18 @@ describe("Home", () => {
     const reloadButton = await screen.findByTestId("reload");
     reloadButton.click();
     expect(loadCountriesSpy.callsCount).toBe(1);
+  });
+  it("should calls LoadCountries with different offset param on load more button", async () => {
+    const { loadCountriesSpy } = sutFactory();
+    const loadMore = screen.queryByTestId("load-more");
+    loadMore.click();
+    expect(loadCountriesSpy.params).toEqual({
+      offset: 12,
+    });
+    await screen.findByTestId("countries-container");
+    loadMore.click();
+    expect(loadCountriesSpy.params).toEqual({
+      offset: 24,
+    });
   });
 });
