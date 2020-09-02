@@ -12,6 +12,6 @@ export class RemoteShowCountry implements ShowCountry {
     if (!country) {
       throw new CountryNotFoundError(countryId);
     }
-    return null;
+    return country;
   }
 }
