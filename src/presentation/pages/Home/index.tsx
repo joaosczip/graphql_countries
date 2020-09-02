@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
@@ -12,20 +12,21 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const [countries, setCountries] = useState<BasicCountry[]>();
   const [error, setError] = useState<Error>();
 
-  useEffect(() => {
-    async function handleLoadCountries() {
-      try {
-        const countriesResult = await loadCountries.load({
-          offset: 0,
-          limit: 12,
-        });
-        setCountries(countriesResult);
-      } catch (error) {
-        setError(error);
-      }
+  const handleLoadCountries = useCallback(async () => {
+    try {
+      const countriesResult = await loadCountries.load({
+        offset: 0,
+        limit: 12,
+      });
+      setCountries(countriesResult);
+    } catch (error) {
+      setError(error);
     }
-    handleLoadCountries();
   }, [loadCountries]);
+
+  useEffect(() => {
+    handleLoadCountries();
+  }, [handleLoadCountries]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -38,7 +39,9 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
         {error && (
           <div data-testid="error-container">
             <span data-testid="error-message">{error.message}</span>
-            <button data-testid="reload">Tentar novamente</button>
+            <button data-testid="reload" onClick={handleLoadCountries}>
+              Tentar novamente
+            </button>
           </div>
         )}
       </Container>
