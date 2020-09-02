@@ -13,8 +13,8 @@
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
+    "@types/react": "^16.9.46",
+    "@types/react-dom": "^16.9.8",
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "babel-eslint": "10.1.0",
@@ -70,7 +70,8 @@
     "webpack": "4.42.0",
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
-    "workbox-webpack-plugin": "4.3.1"
+    "workbox-webpack-plugin": "4.3.1",
+    "yarn-deduplicate": "^3.0.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
@@ -96,6 +97,7 @@
   },
   "devDependencies": {
     "@types/faker": "^4.1.12",
+    "@types/zen-observable": "^0.8.0",
     "faker": "^5.1.0",
     "git-commit-msg-linter": "^2.5.3",
     "ts-jest": "^26.3.0"
