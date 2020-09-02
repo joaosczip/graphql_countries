@@ -66,6 +66,7 @@ describe("Home", () => {
       error.message
     );
     expect(await screen.findByTestId("reload")).toBeInTheDocument();
+    expect(screen.queryByTestId("spinner")).not.toBeInTheDocument();
   });
   it("should display nothing on countries is empty", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
