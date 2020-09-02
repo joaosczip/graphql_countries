@@ -35,12 +35,12 @@ export class GraphqlCountriesRepository implements LoadCountriesRepository {
       query,
     });
 
-    if (!countriesResult.data.length) {
+    if (!countriesResult.data.Country?.length) {
       return null;
     }
 
-    return countriesResult.data.map(({ id, name, capital, flag }) => ({
-      id,
+    return countriesResult.data.Country.map(({ _id, name, capital, flag }) => ({
+      id: _id,
       name,
       capital,
       flag: flag.svgFile,

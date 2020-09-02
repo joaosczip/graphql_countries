@@ -12,20 +12,26 @@ const sutFactory = (): GraphqlCountriesRepository =>
 const mockQueryResult = (
   firstCountry = mockBasicCountry(),
   secondCountry = mockBasicCountry()
-) => [
-  {
-    ...firstCountry,
-    flag: {
-      svgFile: faker.internet.url(),
-    },
+) => ({
+  data: {
+    Country: [
+      {
+        ...firstCountry,
+        _id: firstCountry.id,
+        flag: {
+          svgFile: faker.internet.url(),
+        },
+      },
+      {
+        ...secondCountry,
+        _id: secondCountry.id,
+        flag: {
+          svgFile: faker.internet.url(),
+        },
+      },
+    ],
   },
-  {
-    ...secondCountry,
-    flag: {
-      svgFile: faker.internet.url(),
-    },
-  },
-];
+});
 
 const makeFakeParams = (): LoadCountriesRepository.Params => ({
   offset: faker.random.number(),
@@ -48,9 +54,7 @@ describe("GraphqlCountriesRepository", () => {
       }
     `;
     const querySpy = jest.spyOn(ApolloClient.prototype, "query");
-    querySpy.mockResolvedValueOnce({
-      data: mockQueryResult(),
-    } as ApolloQueryResult<any>);
+    querySpy.mockResolvedValueOnce(mockQueryResult() as ApolloQueryResult<any>);
     await sut.loadAll({
       offset: 0,
       limit: 12,
@@ -60,7 +64,9 @@ describe("GraphqlCountriesRepository", () => {
   it("should returns null if apollo.query returns empty", async () => {
     const sut = sutFactory();
     jest.spyOn(ApolloClient.prototype, "query").mockResolvedValueOnce({
-      data: [],
+      data: {
+        Country: [],
+      },
     } as ApolloQueryResult<any>);
     const result = await sut.loadAll(makeFakeParams());
     expect(result).toBeNull();
@@ -83,15 +89,13 @@ describe("GraphqlCountriesRepository", () => {
 
     jest
       .spyOn(ApolloClient.prototype, "query")
-      .mockResolvedValueOnce({ data: basicCountries } as ApolloQueryResult<
-        any
-      >);
+      .mockResolvedValueOnce(basicCountries as ApolloQueryResult<any>);
 
     const result = await sut.loadAll(makeFakeParams());
 
     const expected = [
-      { ...firstCountry, flag: basicCountries[0].flag.svgFile },
-      { ...secondCountry, flag: basicCountries[1].flag.svgFile },
+      { ...firstCountry, flag: basicCountries.data.Country[0].flag.svgFile },
+      { ...secondCountry, flag: basicCountries.data.Country[1].flag.svgFile },
     ];
     expect(result).toEqual(expected);
   });
