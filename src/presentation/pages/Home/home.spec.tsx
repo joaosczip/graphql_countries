@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
 
@@ -23,5 +23,28 @@ describe("Home", () => {
       offset: 0,
       limit: 12,
     });
+  });
+  it("should renders the correct countries", async () => {
+    const { loadCountriesSpy } = sutFactory();
+    const container = await screen.findByTestId("container");
+    expect(container.children).toHaveLength(loadCountriesSpy.countries.length);
+
+    const firstCountryElement = container.children[0];
+    const secondCountryElement = container.children[1];
+
+    expect(firstCountryElement.querySelector("h2")).toHaveTextContent(
+      loadCountriesSpy.countries[0].name
+    );
+    expect(firstCountryElement.querySelector("img")).toHaveAttribute(
+      "src",
+      loadCountriesSpy.countries[0].flag
+    );
+    expect(secondCountryElement.querySelector("h2")).toHaveTextContent(
+      loadCountriesSpy.countries[1].name
+    );
+    expect(secondCountryElement.querySelector("img")).toHaveAttribute(
+      "src",
+      loadCountriesSpy.countries[1].flag
+    );
   });
 });
