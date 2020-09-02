@@ -3,6 +3,7 @@ import { ApolloClient, gql, ApolloQueryResult } from "@apollo/client/";
 import { GraphqlCountriesRepository } from "./graphql-countries-repository";
 import { mockBasicCountry, mockCountry } from "@/domain/test";
 import { LoadCountriesRepository } from "@/data/protocols";
+import { UnexpectedError } from "@/domain/errors";
 
 jest.mock("@apollo/client");
 
@@ -158,6 +159,15 @@ describe("GraphqlCountriesRepository", () => {
       );
       await sut.load(countryId);
       expect(querySpy).toHaveBeenCalledWith({ query });
+    });
+    it.only("should throws UnexpectedError if apollo.client throws", () => {
+      const sut = sutFactory();
+      const countryId = faker.random.number();
+      jest
+        .spyOn(ApolloClient.prototype, "query")
+        .mockRejectedValueOnce(new Error());
+      const result = sut.load(countryId);
+      expect(result).rejects.toThrow(new UnexpectedError());
     });
   });
 });
