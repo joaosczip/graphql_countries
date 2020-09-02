@@ -61,7 +61,15 @@ describe("GraphqlCountriesRepository", () => {
     });
     expect(querySpy).toHaveBeenCalledWith({ query });
   });
-  it("should returns null if apollo.query returns empty", async () => {
+  it("should returns null if apollo.query dont return Country", async () => {
+    const sut = sutFactory();
+    jest.spyOn(ApolloClient.prototype, "query").mockResolvedValueOnce({
+      data: {},
+    } as ApolloQueryResult<any>);
+    const result = await sut.loadAll(makeFakeParams());
+    expect(result).toBeNull();
+  });
+  it("should returns null if apollo.query returns empty Country", async () => {
     const sut = sutFactory();
     jest.spyOn(ApolloClient.prototype, "query").mockResolvedValueOnce({
       data: {
