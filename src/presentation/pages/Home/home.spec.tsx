@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
 
@@ -7,8 +7,7 @@ type Sut = {
   loadCountriesSpy: LoadCountriesSpy;
 };
 
-const sutFactory = (): Sut => {
-  const loadCountriesSpy = new LoadCountriesSpy();
+const sutFactory = (loadCountriesSpy = new LoadCountriesSpy()): Sut => {
   render(<Home loadCountries={loadCountriesSpy} />);
   return {
     loadCountriesSpy,
@@ -45,6 +44,21 @@ describe("Home", () => {
     expect(secondCountryElement.querySelector("img")).toHaveAttribute(
       "src",
       loadCountriesSpy.countries[1].flag
+    );
+  });
+  it("should display an error message if LoadCountries throws", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const error = new Error("Error loading countries");
+    jest.spyOn(loadCountriesSpy, "load").mockRejectedValueOnce(error);
+
+    sutFactory(loadCountriesSpy);
+
+    const container = await screen.findByTestId("container");
+    expect(container.children).toHaveLength(1);
+
+    expect(await screen.findByTestId("error-container")).toBeInTheDocument();
+    expect(await screen.findByTestId("error-message")).toHaveTextContent(
+      error.message
     );
   });
 });
