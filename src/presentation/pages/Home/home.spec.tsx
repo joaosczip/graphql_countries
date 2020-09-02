@@ -76,11 +76,13 @@ describe("Home", () => {
     const { loadCountriesSpy } = sutFactory();
     const loadMore = screen.queryByTestId("load-more");
     loadMore.click();
+    expect(loadCountriesSpy.callsCount).toBe(2);
     expect(loadCountriesSpy.params).toEqual({
       offset: 12,
     });
     await screen.findByTestId("countries-container");
     loadMore.click();
+    expect(loadCountriesSpy.callsCount).toBe(3);
     expect(loadCountriesSpy.params).toEqual({
       offset: 24,
     });

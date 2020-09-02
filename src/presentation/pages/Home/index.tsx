@@ -9,39 +9,44 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({ loadCountries }) => {
-  const [countries, setCountries] = useState<BasicCountry[]>();
+  const [countries, setCountries] = useState<BasicCountry[]>([]);
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [queryOffset, setQueryOffset] = useState<number>(0);
 
   const handleLoadCountries = useCallback(
-    async (offset = queryOffset) => {
+    async (offset = 0) => {
       try {
         const countriesResult = await loadCountries.load({
           offset,
         });
-        setCountries(countriesResult);
+        setCountries((oldCountries) => [...oldCountries, ...countriesResult]);
       } catch (error) {
         setError(error);
       }
     },
-    [loadCountries, queryOffset]
+    [loadCountries]
   );
 
   const updateCountriesList = useCallback(async () => {
     const newOffset = queryOffset + defaultLimit;
     await handleLoadCountries(newOffset);
-    setQueryOffset(newOffset);
-  }, [handleLoadCountries, queryOffset, defaultLimit]);
+    setQueryOffset(queryOffset + defaultLimit);
+  }, [queryOffset, defaultLimit, handleLoadCountries]);
 
   useEffect(() => {
     handleLoadCountries();
   }, [handleLoadCountries]);
 
+  useEffect(() => console.log("countries", countries), [countries]);
+
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
-        <div data-testid="countries-container">
+        <div
+          data-testid="countries-container"
+          style={{ display: "flex", flexWrap: "wrap" }}
+        >
           {countries
             ? countries.map((country) => (
                 <CountryCard key={country.id} {...country} />
