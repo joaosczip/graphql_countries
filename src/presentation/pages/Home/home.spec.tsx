@@ -62,4 +62,15 @@ describe("Home", () => {
     );
     expect(await screen.findByTestId("reload")).toBeInTheDocument();
   });
+  it("should calls LoadCountries on reload button click", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const error = new Error("Error loading countries");
+    jest.spyOn(loadCountriesSpy, "load").mockRejectedValueOnce(error);
+
+    sutFactory(loadCountriesSpy);
+
+    const reloadButton = await screen.findByTestId("reload");
+    reloadButton.click();
+    expect(loadCountriesSpy.callsCount).toBe(1);
+  });
 });
