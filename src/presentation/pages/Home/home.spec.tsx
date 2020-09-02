@@ -20,6 +20,7 @@ describe("Home", () => {
     expect(loadCountriesSpy.callsCount).toBe(1);
     expect(loadCountriesSpy.params).toEqual({
       offset: 0,
+      limit: 12,
     });
   });
   it("should renders the correct countries", async () => {
@@ -86,6 +87,7 @@ describe("Home", () => {
     expect(loadCountriesSpy.callsCount).toBe(2);
     expect(loadCountriesSpy.params).toEqual({
       offset: 12,
+      limit: 12,
     });
   });
 });

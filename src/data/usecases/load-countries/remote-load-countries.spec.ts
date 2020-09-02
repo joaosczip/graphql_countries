@@ -20,6 +20,7 @@ const sutFactory = (): Sut => {
 
 const makeFakeParams = (): LoadCountries.Params => ({
   offset: faker.random.number(),
+  limit: faker.random.number(),
 });
 
 describe("RemoteLoadCountries", () => {
@@ -28,10 +29,7 @@ describe("RemoteLoadCountries", () => {
     const params = makeFakeParams();
     await sut.load(params);
     expect(loadCountriesRepositorySpy.callsCount).toBe(1);
-    expect(loadCountriesRepositorySpy.params).toEqual({
-      ...params,
-      limit: 12,
-    });
+    expect(loadCountriesRepositorySpy.params).toEqual(params);
   });
   it("should throws if LoadCountriesRepository throws", () => {
     const { sut, loadCountriesRepositorySpy } = sutFactory();

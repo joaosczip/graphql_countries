@@ -7,7 +7,7 @@ export interface LoadCountries {
 export namespace LoadCountries {
   export type Params = {
     offset: number;
-    limit?: number;
+    limit: number;
   };
   export type Result = BasicCountry[];
 }

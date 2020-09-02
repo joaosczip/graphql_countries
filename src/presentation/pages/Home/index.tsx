@@ -19,13 +19,14 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
       try {
         const countriesResult = await loadCountries.load({
           offset,
+          limit: defaultLimit,
         });
         setCountries((oldCountries) => [...oldCountries, ...countriesResult]);
       } catch (error) {
         setError(error);
       }
     },
-    [loadCountries]
+    [loadCountries, defaultLimit]
   );
 
   const updateCountriesList = useCallback(async () => {
