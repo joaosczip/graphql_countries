@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import {
@@ -13,7 +14,10 @@ import { Container } from "./styles";
 
 type Props = BasicCountry;
 
-const CountryCard: React.FC<Props> = ({ name, capital, flag }) => {
+const CountryCard: React.FC<Props> = ({ id, name, capital, flag }) => {
+  const history = useHistory();
+  const redirectToCountryPage = () => history.replace(`/country/${id}`);
+
   return (
     <Container>
       <Card>
@@ -35,7 +39,7 @@ const CountryCard: React.FC<Props> = ({ name, capital, flag }) => {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary">
+          <Button size="small" color="primary" onClick={redirectToCountryPage}>
             Detalhes
           </Button>
         </CardActions>
