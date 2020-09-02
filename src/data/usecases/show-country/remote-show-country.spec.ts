@@ -24,4 +24,12 @@ describe("RemoteShowCountry", () => {
     expect(loadCountryByIdRepositorySpy.callsCount).toBe(1);
     expect(loadCountryByIdRepositorySpy.countryId).toBe(fakeCountryId);
   });
+  it("should throws if LoadCountryByIdRepository throws", () => {
+    const { sut, loadCountryByIdRepositorySpy } = sutFactory();
+    jest
+      .spyOn(loadCountryByIdRepositorySpy, "load")
+      .mockRejectedValueOnce(new Error());
+    const result = sut.find(faker.random.number());
+    expect(result).rejects.toThrow(new Error());
+  });
 });
