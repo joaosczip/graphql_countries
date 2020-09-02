@@ -23,33 +23,39 @@ export class GraphqlCountriesRepository
   async loadAll(
     params: LoadCountriesRepository.Params
   ): Promise<LoadCountriesRepository.Result> {
-    const query = gql`
-      {
-        Country(first: ${params.limit}, offset: ${params.offset}) {
-          _id
-          name
-          capital
-          flag {
-            svgFile
+    try {
+      const query = gql`
+        {
+          Country(first: ${params.limit}, offset: ${params.offset}) {
+            _id
+            name
+            capital
+            flag {
+              svgFile
+            }
           }
         }
+      `;
+
+      const countriesResult = await this.client.query({
+        query,
+      });
+
+      if (!countriesResult.data.Country?.length) {
+        return null;
       }
-    `;
 
-    const countriesResult = await this.client.query({
-      query,
-    });
-
-    if (!countriesResult.data.Country?.length) {
-      return null;
+      return countriesResult.data.Country.map(
+        ({ _id, name, capital, flag }) => ({
+          id: _id,
+          name,
+          capital,
+          flag: flag.svgFile,
+        })
+      );
+    } catch {
+      throw new UnexpectedError();
     }
-
-    return countriesResult.data.Country.map(({ _id, name, capital, flag }) => ({
-      id: _id,
-      name,
-      capital,
-      flag: flag.svgFile,
-    }));
   }
 
   async load(countryId: number): Promise<LoadCountryByIdRepository.Result> {

@@ -104,13 +104,13 @@ describe("GraphqlCountriesRepository", () => {
       const result = await sut.loadAll(makeFakeParams());
       expect(result).toBeNull();
     });
-    it("should throws if apollo.query throws", () => {
+    it("should throws UnexpectedError if apollo.query throws", () => {
       const sut = sutFactory();
       jest
         .spyOn(ApolloClient.prototype, "query")
         .mockRejectedValueOnce(new Error());
       const result = sut.loadAll(makeFakeParams());
-      expect(result).rejects.toThrow(new Error());
+      expect(result).rejects.toThrow(new UnexpectedError());
     });
     it("should returns the countries on success", async () => {
       const sut = sutFactory();
