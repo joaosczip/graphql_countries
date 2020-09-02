@@ -42,17 +42,18 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
         <CountriesContainer
-          data-testid="countries-container"
           dataLength={countries.length}
           next={updateCountriesList}
           hasMore={true}
-          loader={<h1>Carregando...</h1>}
+          loader={!error && <h1>Carregando...</h1>}
         >
-          {countries
-            ? countries.map((country) => (
-                <CountryCard key={country.id} {...country} />
-              ))
-            : null}
+          <div data-testid="countries-container">
+            {countries
+              ? countries.map((country) => (
+                  <CountryCard key={country.id} {...country} />
+                ))
+              : null}
+          </div>
         </CountriesContainer>
         {error && (
           <div data-testid="error-container">
@@ -62,9 +63,6 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
             </button>
           </div>
         )}
-        <button onClick={updateCountriesList} data-testid="load-more">
-          Carregar mais
-        </button>
       </Container>
     </div>
   );
