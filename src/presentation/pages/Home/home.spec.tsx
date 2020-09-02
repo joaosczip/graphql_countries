@@ -1,5 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
 
@@ -7,8 +9,13 @@ type Sut = {
   loadCountriesSpy: LoadCountriesSpy;
 };
 
+const history = createMemoryHistory({ initialEntries: ["/"] });
 const sutFactory = (loadCountriesSpy = new LoadCountriesSpy()): Sut => {
-  render(<Home loadCountries={loadCountriesSpy} />);
+  render(
+    <Router history={history}>
+      <Home loadCountries={loadCountriesSpy} />
+    </Router>
+  );
   return {
     loadCountriesSpy,
   };
@@ -95,5 +102,13 @@ describe("Home", () => {
       offset: 12,
       limit: 12,
     });
+  });
+  it("should redirect to the country page on details button click", async () => {
+    const { loadCountriesSpy } = sutFactory();
+    const country = loadCountriesSpy.countries[0];
+    const container = await screen.findByTestId("countries-container");
+    const detailsButton = container.children[0].querySelectorAll("button")[1];
+    detailsButton.click();
+    expect(history.location.pathname).toBe(`/country/${country.id}`);
   });
 });
