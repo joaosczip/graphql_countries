@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
-import { CountryCard } from "./components";
+import { CountryCard, SkeletonCards } from "./components";
 import Spinner from "@/presentation/components/Spinner";
 import { Container, CountriesContainer } from "./styles";
 
@@ -14,6 +14,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [queryOffset, setQueryOffset] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -25,6 +26,8 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
         setCountries((oldCountries) => [...oldCountries, ...countriesResult]);
       } catch (error) {
         setError(error);
+      } finally {
+        setLoading(false);
       }
     },
     [loadCountries, defaultLimit]
@@ -43,6 +46,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
+        <SkeletonCards />
         <CountriesContainer
           dataLength={countries.length}
           next={updateCountriesList}
