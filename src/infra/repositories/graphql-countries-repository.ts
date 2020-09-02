@@ -71,8 +71,19 @@ export class GraphqlCountriesRepository
         }
       `;
 
-      await this.client.query({ query });
-      return null;
+      const queryResult = await this.client.query({ query });
+      if (!queryResult.data.Country.length) {
+        return null;
+      }
+
+      const { topLevelDomains, flag, ...country } = queryResult.data.Country[0];
+
+      return {
+        ...country,
+        id: countryId,
+        flag: flag.svgFile,
+        topLevelDomains: topLevelDomains[0].name,
+      };
     } catch {
       throw new UnexpectedError();
     }
