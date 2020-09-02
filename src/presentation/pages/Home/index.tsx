@@ -9,27 +9,37 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({ loadCountries }) => {
-  const [countries, setCountries] = useState<BasicCountry[]>([]);
+  const [countries, setCountries] = useState<BasicCountry[]>();
+  const [error, setError] = useState<Error>();
 
   useEffect(() => {
-    loadCountries
-      .load({
-        offset: 0,
-        limit: 12,
-      })
-      .then((countriesResult) => {
+    async function handleLoadCountries() {
+      try {
+        const countriesResult = await loadCountries.load({
+          offset: 0,
+          limit: 12,
+        });
         setCountries(countriesResult);
-      })
-      .catch(console.log);
+      } catch (error) {
+        setError(error);
+      }
+    }
+    handleLoadCountries();
   }, [loadCountries]);
 
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
-        {countries &&
-          countries.map((country) => (
-            <CountryCard key={country.id} {...country} />
-          ))}
+        {countries
+          ? countries.map((country) => (
+              <CountryCard key={country.id} {...country} />
+            ))
+          : null}
+        {error && (
+          <div data-testid="error-container">
+            <span data-testid="error-message">{error.message}</span>
+          </div>
+        )}
       </Container>
     </div>
   );
