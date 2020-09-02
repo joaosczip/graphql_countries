@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
-import { Container } from "./styles";
+import { Container, CountriesContainer } from "./styles";
 
 type Props = {
   loadCountries: LoadCountries;
@@ -38,21 +38,16 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
     handleLoadCountries();
   }, [handleLoadCountries]);
 
-  useEffect(() => console.log("countries", countries), [countries]);
-
   return (
     <div style={{ position: "relative" }}>
       <Container data-testid="container">
-        <div
-          data-testid="countries-container"
-          style={{ display: "flex", flexWrap: "wrap" }}
-        >
+        <CountriesContainer data-testid="countries-container">
           {countries
             ? countries.map((country) => (
                 <CountryCard key={country.id} {...country} />
               ))
             : null}
-        </div>
+        </CountriesContainer>
         {error && (
           <div data-testid="error-container">
             <span data-testid="error-message">{error.message}</span>
