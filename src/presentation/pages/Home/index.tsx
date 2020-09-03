@@ -28,7 +28,7 @@ type Props = {
 const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
-  const [searchTerm, setSearchTerm] = useState<string>();
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const dispatch = useDispatch();
   const countries = useSelector(selectCountries);
   const queryOffset = useSelector(selectQueryOffset);
@@ -68,6 +68,10 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
       } catch (error) {
         setError(error);
       }
+    }
+
+    if (!Boolean(searchTerm)) {
+      return;
     }
     handleSearchCountries();
   }, [searchTerm, findCountries]);
