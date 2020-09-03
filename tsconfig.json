@@ -6,6 +6,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "rootDir": "src",
     "baseUrl": "src",
