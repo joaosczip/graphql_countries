@@ -6,12 +6,14 @@ export type GlobalState = {
   countries: BasicCountry[];
   currentCountry: Country;
   error: Error;
+  queryOffset: number;
 };
 
 const INITAL_STATE: GlobalState = {
   countries: [],
   error: null,
   currentCountry: null,
+  queryOffset: 0,
 };
 
 const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
@@ -30,6 +32,11 @@ const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
       return {
         ...state,
         currentCountry: action.payload,
+      };
+    case GlobalTypes.SET_QUERY_OFFSET:
+      return {
+        ...state,
+        queryOffset: action.payload,
       };
     default:
       return state;

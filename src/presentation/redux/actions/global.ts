@@ -28,3 +28,12 @@ export const setCurrentCountry = (
   type: GlobalTypes.SET_CURRENT_COUNTRY,
   payload: country,
 });
+
+export const setQueryOffset = (
+  offset: number
+): Omit<Action, "payload"> & {
+  payload: number;
+} => ({
+  type: GlobalTypes.SET_QUERY_OFFSET,
+  payload: offset,
+});

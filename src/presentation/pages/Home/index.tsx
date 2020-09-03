@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/presentation/redux/store";
-import { setCountries, setCurrentError } from "@/presentation/redux/actions";
+import {
+  setCountries,
+  setCurrentError,
+  setQueryOffset,
+} from "@/presentation/redux/actions";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
@@ -15,10 +19,12 @@ type Props = {
 const Home: React.FC<Props> = ({ loadCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
-  const [queryOffset, setQueryOffset] = useState<number>(0);
   const dispatch = useDispatch();
-  const globalError = useSelector((state: RootState) => state.global.error);
   const countries = useSelector((state: RootState) => state.global.countries);
+  const queryOffset = useSelector(
+    (state: RootState) => state.global.queryOffset
+  );
+  const globalError = useSelector((state: RootState) => state.global.error);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -38,8 +44,8 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const updateCountriesList = useCallback(async () => {
     const newOffset = queryOffset + defaultLimit;
     await handleLoadCountries(newOffset);
-    setQueryOffset(queryOffset + defaultLimit);
-  }, [queryOffset, defaultLimit, handleLoadCountries]);
+    dispatch(setQueryOffset(queryOffset + defaultLimit));
+  }, [queryOffset, defaultLimit, handleLoadCountries, dispatch]);
 
   useEffect(() => {
     if (!countries.length) {
