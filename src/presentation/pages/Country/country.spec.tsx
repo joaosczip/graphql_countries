@@ -69,7 +69,7 @@ describe("Country", () => {
       `Domínio de topo: ${showCountrySpy.country.topLevelDomain}`
     );
   });
-  it("should shows error message if ShowCountry throws", async () => {
+  it("should redirect to Home on error", async () => {
     const showCountrySpy = new ShowCountrySpy();
     const error = new Error("Error while fetching the country");
     jest.spyOn(showCountrySpy, "find").mockRejectedValueOnce(error);
@@ -77,9 +77,6 @@ describe("Country", () => {
     await waitFor(() => {
       expect(screen.queryByTestId("country-container")).not.toBeInTheDocument();
     });
-    expect(screen.queryByTestId("error-container")).toBeInTheDocument();
-    expect(screen.queryByTestId("error-message")).toHaveTextContent(
-      error.message
-    );
+    expect(history.location.pathname).toBe("/");
   });
 });

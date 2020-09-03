@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
@@ -27,6 +27,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<Error>();
   const { countryId } = useParams();
+  const history = useHistory();
 
   useEffect(() => {
     async function loadCountry() {
@@ -35,12 +36,13 @@ const Country: React.FC<Props> = ({ showCountry }) => {
         setCountry(queryResult);
       } catch (error) {
         setError(error);
+        history.replace("/");
       } finally {
         setLoading(false);
       }
     }
     loadCountry();
-  }, [countryId, showCountry]);
+  }, [countryId, showCountry, history]);
 
   const formatNum = (num: number): string =>
     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
