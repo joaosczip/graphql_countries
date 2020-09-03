@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/presentation/redux/store";
+import { setCurrentError } from "@/presentation/redux/actions";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
@@ -17,6 +18,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [queryOffset, setQueryOffset] = useState<number>(0);
+  const dispatch = useDispatch();
   const globalError = useSelector((state: RootState) => state.global.error);
 
   const handleLoadCountries = useCallback(
@@ -68,7 +70,12 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           </div>
         </CountriesContainer>
       </Container>
-      {globalError && <ErrorAlert error={globalError} />}
+      {globalError && (
+        <ErrorAlert
+          error={globalError}
+          handleClose={() => dispatch(setCurrentError(error))}
+        />
+      )}
     </div>
   );
 };
