@@ -54,6 +54,12 @@ describe("Home", () => {
       limit: 12,
     });
   });
+  it("should not calls FindCountries on load", () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, []);
+    const { findCountriesSpy } = sutFactory(loadCountriesSpy, state);
+    expect(findCountriesSpy.callsCount).toBe(0);
+  });
   it("should shows the cards skeleton on loading", async () => {
     sutFactory();
     const spinner = await screen.findByTestId("skeleton");
