@@ -95,9 +95,32 @@ export class GraphqlCountriesRepository
     }
   }
 
-  async loadBy(
-    params: LoadCountriesRepository.LoadByParams
-  ): Promise<LoadCountriesRepository.Result> {
-    return null;
+  async loadBy({
+    name,
+  }: LoadCountriesRepository.LoadByParams): Promise<
+    LoadCountriesRepository.Result
+  > {
+    try {
+      const capitalize = (value: string) =>
+        value.charAt(0).toUpperCase() + value.slice(1);
+
+      const query = gql`
+        {
+          Country(filter: { name_starts_with: ${capitalize(name)} }) {
+            _id
+            name
+            capital
+            flag {
+              svgFile
+            }
+          }
+        }
+      `;
+
+      await this.client.query({ query });
+      return null;
+    } catch {
+      throw new UnexpectedError();
+    }
   }
 }
