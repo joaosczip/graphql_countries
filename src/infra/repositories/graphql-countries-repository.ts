@@ -94,4 +94,10 @@ export class GraphqlCountriesRepository
       throw new UnexpectedError();
     }
   }
+
+  async loadBy(
+    params: LoadCountriesRepository.LoadByParams
+  ): Promise<LoadCountriesRepository.Result> {
+    return null;
+  }
 }

@@ -201,4 +201,28 @@ describe("GraphqlCountriesRepository", () => {
       expect(result).toEqual(expected);
     });
   });
+  describe("loadBy", () => {
+    it("should calls apollo.query with correct data", async () => {
+      const sut = sutFactory();
+      const name = faker.address.country();
+      const query = gql`
+        {
+          Country(filter: { name_starts_with: ${name} }) {
+            _id
+            name
+            capital
+            flag {
+              svgFile
+            }
+          }
+        }
+      `;
+      const querySpy = jest.spyOn(ApolloClient.prototype, "query");
+      querySpy.mockResolvedValueOnce(
+        mockQueryResult() as ApolloQueryResult<any>
+      );
+      await sut.loadBy({ name });
+      expect(querySpy).toHaveBeenCalledWith({ query });
+    });
+  });
 });
