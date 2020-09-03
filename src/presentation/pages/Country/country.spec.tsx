@@ -5,13 +5,13 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
-import redux, { Provider } from "react-redux";
+import { Provider } from "react-redux";
 import { globalReducer } from "@/presentation/redux/reducers";
 import { RootState } from "@/presentation/redux/store";
 import Country from ".";
 import { ShowCountrySpy, mockInitialState } from "@/presentation/test";
 import { mockBasicCountries } from "@/domain/test";
-import { setCurrentCountry, updateCountry } from "@/presentation/redux/actions";
+import { updateCountry } from "@/presentation/redux/actions";
 
 const fakeCountryId = faker.random.number();
 jest.mock("react-router-dom", () => ({
