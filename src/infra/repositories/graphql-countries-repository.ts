@@ -99,7 +99,7 @@ export class GraphqlCountriesRepository
 
       const query = gql`
         {
-          Country(filter: { name_starts_with: ${capitalize(name)} }) {
+          Country(filter: { name_starts_with: "${capitalize(name)}" }) {
             _id
             name
             capital

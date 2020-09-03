@@ -207,7 +207,7 @@ describe("GraphqlCountriesRepository", () => {
       const name = faker.address.country();
       const query = gql`
         {
-          Country(filter: { name_starts_with: ${name} }) {
+          Country(filter: { name_starts_with: "${name}" }) {
             _id
             name
             capital
