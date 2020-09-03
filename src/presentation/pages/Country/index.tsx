@@ -33,7 +33,7 @@ type Country = ShowCountry.Result;
 const Country: React.FC<Props> = ({ showCountry }) => {
   const [country, setCountry] = useState<Country>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(true);
   const { countryId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
