@@ -24,7 +24,7 @@ const sutFactory = (
 ): Sut => {
   render(
     <Router history={history}>
-      <Provider store={createStore(globalReducer, state)}>
+      <Provider store={createStore(globalReducer, state as any)}>
         <Home loadCountries={loadCountriesSpy} />
       </Provider>
     </Router>

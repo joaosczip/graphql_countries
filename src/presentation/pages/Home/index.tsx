@@ -5,9 +5,7 @@ import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
-import { Error as ErrorComponent } from "@/presentation/components";
-import { Snackbar } from "@material-ui/core";
-import { Alert } from "@material-ui/lab";
+import { Error as ErrorComponent, ErrorAlert } from "@/presentation/components";
 import { Container, CountriesContainer } from "./styles";
 
 type Props = {
@@ -70,23 +68,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           </div>
         </CountriesContainer>
       </Container>
-      {globalError && (
-        <Snackbar
-          data-testid="error-alert"
-          open={true}
-          autoHideDuration={3000}
-          onClose={() => {}}
-        >
-          <Alert
-            variant="filled"
-            elevation={6}
-            onClose={() => {}}
-            severity="error"
-          >
-            <span data-testid="error-message">{globalError.message}</span>
-          </Alert>
-        </Snackbar>
-      )}
+      {globalError && <ErrorAlert error={globalError} />}
     </div>
   );
 };
