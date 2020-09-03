@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter, Switch, Route as Router } from "react-router-dom";
 import GlobalStyles from "@/presentation/styles/global";
-import { HomeFactory } from "@/main/factories";
-import Country from "@/presentation/pages/Country";
+import { HomeFactory, CountryFactory } from "@/main/factories";
 
 const Route: React.FC = () => {
   return (
@@ -12,7 +11,7 @@ const Route: React.FC = () => {
         <Router
           exact
           path="/country/:countryId"
-          component={() => <Country />}
+          component={() => <CountryFactory />}
         />
       </Switch>
       <GlobalStyles />

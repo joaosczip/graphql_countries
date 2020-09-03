@@ -62,7 +62,7 @@ export class GraphqlCountriesRepository
     try {
       const query = gql`
         {
-          Country(_id: ${countryId}) {
+          Country(_id: "${countryId}") {
             name
             area
             population

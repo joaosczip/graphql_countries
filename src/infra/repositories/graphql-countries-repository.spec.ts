@@ -139,7 +139,7 @@ describe("GraphqlCountriesRepository", () => {
       const countryId = faker.random.number();
       const query = gql`
         {
-          Country(_id: ${countryId}) {
+          Country(_id: "${countryId}") {
             name
             area
             population

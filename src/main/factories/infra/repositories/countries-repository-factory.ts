@@ -1,6 +1,5 @@
-import { LoadCountriesRepository } from "@/data/protocols";
 import { GraphqlCountriesRepository } from "@/infra/repositories";
 
-export const countriesRepositoryFactory = (): LoadCountriesRepository => {
+export const countriesRepositoryFactory = (): GraphqlCountriesRepository => {
   return new GraphqlCountriesRepository();
 };
