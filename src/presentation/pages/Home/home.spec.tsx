@@ -1,12 +1,12 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import { globalReducer } from "@/presentation/redux/reducers";
 import Home from ".";
 import { LoadCountriesSpy } from "@/presentation/test";
-import { globalReducer } from "@/presentation/redux/reducers";
 
 type Sut = {
   loadCountriesSpy: LoadCountriesSpy;

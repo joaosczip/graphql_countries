@@ -54,7 +54,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
         <CountrySkeleton />
       ) : (
         <Card data-testid="country-container">
-          <CardMedia component="img" image={country.flag} height="260" />
+          <CardMedia component="img" image={country?.flag} height="260" />
           <CardContent>
             <Typography
               data-testid="country-name"
@@ -62,7 +62,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
               variant="h3"
               component="h3"
             >
-              {country.name}
+              {country?.name}
             </Typography>
             <List component="nav" aria-label="main mailbox folders">
               <ListItem button>
@@ -71,7 +71,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
                 </ListItemIcon>
                 <ListItemText
                   data-testid="capital"
-                  primary={`Capital: ${country.capital}`}
+                  primary={`Capital: ${country?.capital}`}
                 />
               </ListItem>
               <ListItem button>
@@ -80,7 +80,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
                 </ListItemIcon>
                 <ListItemText
                   data-testid="population"
-                  primary={`População: ${formatNum(country.population)}`}
+                  primary={`População: ${formatNum(country?.population)}`}
                 />
               </ListItem>
               <ListItem button>
@@ -89,7 +89,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
                 </ListItemIcon>
                 <ListItemText
                   data-testid="area"
-                  primary={`Área: ${formatNum(country.area)} m²`}
+                  primary={`Área: ${formatNum(country?.area)} m²`}
                 />
               </ListItem>
               <ListItem button>
@@ -98,7 +98,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
                 </ListItemIcon>
                 <ListItemText
                   data-testid="top-level"
-                  primary={`Domínio de topo: ${country.topLevelDomain}`}
+                  primary={`Domínio de topo: ${country?.topLevelDomain}`}
                 />
               </ListItem>
             </List>

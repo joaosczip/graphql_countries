@@ -3,6 +3,10 @@ import faker from "faker";
 import { render, screen, waitFor } from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import { globalReducer } from "@/presentation/redux/reducers";
+import { RootState } from "@/presentation/redux/store";
 import Country from ".";
 import { ShowCountrySpy } from "@/presentation/test";
 
@@ -19,10 +23,26 @@ type Sut = {
 const history = createMemoryHistory({
   initialEntries: [`/country/${fakeCountryId}`],
 });
-const sutFactory = (showCountrySpy = new ShowCountrySpy()): Sut => {
+
+const initialState = {
+  global: {
+    error: null,
+  },
+};
+
+type SutParams = {
+  showCountrySpy?: ShowCountrySpy;
+  state?: RootState;
+};
+const sutFactory = ({
+  showCountrySpy = new ShowCountrySpy(),
+  state = initialState,
+}: SutParams): Sut => {
   render(
     <Router history={history}>
-      <Country showCountry={showCountrySpy} />
+      <Provider store={createStore(globalReducer, state as any)}>
+        <Country showCountry={showCountrySpy} />
+      </Provider>
     </Router>
   );
 
@@ -31,14 +51,14 @@ const sutFactory = (showCountrySpy = new ShowCountrySpy()): Sut => {
 
 describe("Country", () => {
   it("should shows country skeleton and calls ShowCountry on load with correct id", async () => {
-    const { showCountrySpy } = sutFactory();
+    const { showCountrySpy } = sutFactory({} as SutParams);
     await waitFor(() => {
       expect(screen.queryByTestId("country-skeleton")).toBeInTheDocument();
     });
     expect(showCountrySpy.countryId).toEqual(fakeCountryId);
   });
   it("should hide the skeleton and present the correct country values", async () => {
-    const { showCountrySpy } = sutFactory();
+    const { showCountrySpy } = sutFactory({} as SutParams);
     const countryContainer = await screen.findByTestId("country-container");
     expect(countryContainer).toBeInTheDocument();
 
@@ -73,7 +93,7 @@ describe("Country", () => {
     const showCountrySpy = new ShowCountrySpy();
     const error = new Error("Error while fetching the country");
     jest.spyOn(showCountrySpy, "find").mockRejectedValueOnce(error);
-    sutFactory(showCountrySpy);
+    sutFactory({ showCountrySpy });
     await waitFor(() => {
       expect(screen.queryByTestId("country-container")).not.toBeInTheDocument();
     });
