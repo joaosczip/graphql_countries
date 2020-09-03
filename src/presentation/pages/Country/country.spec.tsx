@@ -1,6 +1,12 @@
 import React from "react";
 import faker from "faker";
-import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  findByTestId,
+} from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
@@ -54,7 +60,9 @@ describe("Country", () => {
     expect(showCountrySpy.countryId).toEqual(fakeCountryId);
   });
   it("should hide the skeleton and present the correct country values", async () => {
-    const { showCountrySpy } = sutFactory({} as SutParams);
+    const showCountrySpy = new ShowCountrySpy();
+    const state = mockInitialState(null, showCountrySpy.country);
+    sutFactory({ showCountrySpy, state });
     const countryContainer = await screen.findByTestId("country-container");
     expect(countryContainer).toBeInTheDocument();
 
@@ -100,5 +108,31 @@ describe("Country", () => {
     const updateButton = await screen.findByTestId("update");
     fireEvent.click(updateButton);
     expect(screen.queryByTestId("update-country")).toBeInTheDocument();
+  });
+  it("should show the correct values on modal", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    const state = mockInitialState(null, showCountrySpy.country);
+    sutFactory({ showCountrySpy, state });
+    const updateButton = await screen.findByTestId("update");
+    fireEvent.click(updateButton);
+    await screen.findByTestId("update-country");
+    expect(screen.getByTitle("title")).toHaveTextContent(
+      showCountrySpy.country.name
+    );
+    expect(screen.getByTestId("name-input")).toHaveValue(
+      showCountrySpy.country.name
+    );
+    expect(screen.getByTestId("capital-input")).toHaveValue(
+      showCountrySpy.country.capital
+    );
+    expect(screen.getByTestId("population-input")).toHaveValue(
+      String(showCountrySpy.country.population)
+    );
+    expect(screen.getByTestId("area-input")).toHaveValue(
+      String(showCountrySpy.country.area)
+    );
+    expect(screen.getByTestId("top-level-input")).toHaveValue(
+      showCountrySpy.country.topLevelDomain
+    );
   });
 });
