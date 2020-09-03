@@ -1,9 +1,17 @@
 import React from "react";
 import Home from "@/presentation/pages/Home";
-import { loadCountriesFactory } from "@/main/factories/usecases";
+import {
+  loadCountriesFactory,
+  findCountriesFactory,
+} from "@/main/factories/usecases";
 
 const HomeFactory: React.FC = () => {
-  return <Home loadCountries={loadCountriesFactory()} />;
+  return (
+    <Home
+      loadCountries={loadCountriesFactory()}
+      findCountries={findCountriesFactory()}
+    />
+  );
 };
 
 export default HomeFactory;
