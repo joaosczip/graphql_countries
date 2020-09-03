@@ -6,18 +6,15 @@ import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { globalReducer } from "@/presentation/redux/reducers";
 import Home from ".";
-import { LoadCountriesSpy } from "@/presentation/test";
+import { LoadCountriesSpy, mockInitialState } from "@/presentation/test";
 
 type Sut = {
   loadCountriesSpy: LoadCountriesSpy;
 };
 
 const history = createMemoryHistory({ initialEntries: ["/"] });
-const initialState = {
-  global: {
-    error: null,
-  },
-};
+const initialState = mockInitialState();
+
 const sutFactory = (
   loadCountriesSpy = new LoadCountriesSpy(),
   state = initialState

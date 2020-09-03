@@ -8,7 +8,7 @@ import { Provider } from "react-redux";
 import { globalReducer } from "@/presentation/redux/reducers";
 import { RootState } from "@/presentation/redux/store";
 import Country from ".";
-import { ShowCountrySpy } from "@/presentation/test";
+import { ShowCountrySpy, mockInitialState } from "@/presentation/test";
 
 const fakeCountryId = faker.random.number();
 jest.mock("react-router-dom", () => ({
@@ -24,11 +24,7 @@ const history = createMemoryHistory({
   initialEntries: [`/country/${fakeCountryId}`],
 });
 
-const initialState = {
-  global: {
-    error: null,
-  },
-};
+const initialState = mockInitialState();
 
 type SutParams = {
   showCountrySpy?: ShowCountrySpy;
