@@ -8,12 +8,21 @@ export class LoadCountriesRepositorySpy implements LoadCountriesRepository {
   callsCount = 0;
   params: any;
   countries = mockBasicCountries();
+
   async loadAll(
     params: LoadCountriesRepository.Params
   ): Promise<LoadCountriesRepository.Result> {
     this.callsCount++;
     this.params = params;
     return Promise.resolve(this.countries);
+  }
+
+  async loadBy(
+    params: LoadCountriesRepository.LoadByParams
+  ): Promise<LoadCountriesRepository.Result> {
+    this.callsCount++;
+    this.params = params;
+    return this.countries;
   }
 }
 
