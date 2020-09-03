@@ -19,8 +19,7 @@ type Sut = {
 const history = createMemoryHistory({
   initialEntries: [`/country/${fakeCountryId}`],
 });
-const sutFactory = (): Sut => {
-  const showCountrySpy = new ShowCountrySpy();
+const sutFactory = (showCountrySpy = new ShowCountrySpy()): Sut => {
   render(
     <Router history={history}>
       <Country showCountry={showCountrySpy} />
@@ -68,6 +67,19 @@ describe("Country", () => {
       screen.getByTestId("top-level").querySelector("span")
     ).toHaveTextContent(
       `Domínio de topo: ${showCountrySpy.country.topLevelDomain}`
+    );
+  });
+  it("should shows error message if ShowCountry throws", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    const error = new Error("Error while fetching the country");
+    jest.spyOn(showCountrySpy, "find").mockRejectedValueOnce(error);
+    sutFactory(showCountrySpy);
+    await waitFor(() => {
+      expect(screen.queryByTestId("country-container")).not.toBeInTheDocument();
+    });
+    expect(screen.queryByTestId("error-container")).toBeInTheDocument();
+    expect(screen.queryByTestId("error-message")).toHaveTextContent(
+      error.message
     );
   });
 });
