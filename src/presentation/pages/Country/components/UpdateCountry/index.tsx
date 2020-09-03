@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import {
   Modal,
   Card,
@@ -9,6 +10,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { Main, FormContainer, FormTop, FormBottom } from "./styles";
+import { RootState } from "@/presentation/redux/store";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -28,6 +30,9 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateCountry: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const classes = useStyles();
+  const country = useSelector(
+    (state: RootState) => state.global.currentCountry
+  );
 
   return (
     <div data-testid="update-country">
@@ -40,29 +45,56 @@ const UpdateCountry: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
         <Main>
           <Card className={classes.paper}>
             <CardContent>
-              <Typography variant="h4" component="h4" className={classes.title}>
-                Algeria
+              <Typography
+                title="title"
+                variant="h4"
+                component="h4"
+                className={classes.title}
+              >
+                {country?.name}
               </Typography>
               <FormContainer>
                 <FormTop>
                   <div>
-                    <TextField label="Nome" type="text" variant="outlined" />
-                  </div>
-                  <div>
-                    <TextField label="Capital" type="text" variant="outlined" />
+                    <TextField
+                      inputProps={{ "data-testid": "name-input" }}
+                      label="Nome"
+                      value={country?.name}
+                      type="text"
+                      variant="outlined"
+                    />
                   </div>
                   <div>
                     <TextField
+                      inputProps={{ "data-testid": "capital-input" }}
+                      label="Capital"
+                      value={country?.capital}
+                      type="text"
+                      variant="outlined"
+                    />
+                  </div>
+                  <div>
+                    <TextField
+                      inputProps={{ "data-testid": "population-input" }}
                       label="População"
+                      value={country?.population}
                       type="text"
                       variant="outlined"
                     />
                   </div>
                 </FormTop>
                 <FormBottom>
-                  <TextField label="População" type="text" variant="outlined" />
+                  <TextField
+                    inputProps={{ "data-testid": "area-input" }}
+                    label="Área"
+                    value={country?.area}
+                    type="text"
+                    variant="outlined"
+                  />
                   <div style={{ width: "4%" }} />
                   <TextField
+                    inputProps={{ "data-testid": "top-level-input" }}
+                    value={country?.topLevelDomain}
                     label="Domínio de topo"
                     type="text"
                     variant="outlined"

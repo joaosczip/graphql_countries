@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   List,
   ListItem,
@@ -21,7 +21,11 @@ import {
 } from "@material-ui/icons";
 import { ShowCountry } from "@/domain/usecases";
 import { CountrySkeleton, UpdateCountry } from "./components";
-import { setCurrentError } from "@/presentation/redux/actions";
+import {
+  setCurrentError,
+  setCurrentCountry,
+} from "@/presentation/redux/actions";
+import { RootState } from "@/presentation/redux/store";
 import { Container } from "./styles";
 
 type Props = {
@@ -31,18 +35,20 @@ type Props = {
 type Country = ShowCountry.Result;
 
 const Country: React.FC<Props> = ({ showCountry }) => {
-  const [country, setCountry] = useState<Country>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [openModal, setOpenModal] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { countryId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
+  const country = useSelector(
+    (state: RootState) => state.global.currentCountry
+  );
 
   useEffect(() => {
     async function loadCountry() {
       try {
         const queryResult = await showCountry.find(countryId);
-        setCountry(queryResult);
+        dispatch(setCurrentCountry(queryResult));
       } catch (error) {
         dispatch(setCurrentError(error));
         history.replace("/");
