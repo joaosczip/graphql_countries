@@ -25,7 +25,7 @@ import {
   setCurrentError,
   setCurrentCountry,
 } from "@/presentation/redux/actions";
-import { RootState } from "@/presentation/redux/store";
+import { selectCurrentCountry } from "@/presentation/redux/selectors";
 import { Container } from "./styles";
 
 type Props = {
@@ -40,9 +40,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
   const { countryId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
-  const country = useSelector(
-    (state: RootState) => state.global.currentCountry
-  );
+  const country = useSelector(selectCurrentCountry);
 
   useEffect(() => {
     async function loadCountry() {

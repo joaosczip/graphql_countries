@@ -9,8 +9,8 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
+import { selectCurrentCountry } from "@/presentation/redux/selectors";
 import { Main, FormContainer, FormTop, FormBottom } from "./styles";
-import { RootState } from "@/presentation/redux/store";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -30,9 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UpdateCountry: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
   const classes = useStyles();
-  const country = useSelector(
-    (state: RootState) => state.global.currentCountry
-  );
+  const country = useSelector(selectCurrentCountry);
 
   return (
     <div data-testid="update-country">

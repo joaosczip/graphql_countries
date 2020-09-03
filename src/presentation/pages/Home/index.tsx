@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "@/presentation/redux/store";
 import {
   setCountries,
   setCurrentError,
@@ -11,6 +10,11 @@ import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
 import { Error as ErrorComponent, ErrorAlert } from "@/presentation/components";
 import { Container, CountriesContainer } from "./styles";
+import {
+  selectCountries,
+  selectQueryOffset,
+  selectError,
+} from "@/presentation/redux/selectors";
 
 type Props = {
   loadCountries: LoadCountries;
@@ -20,11 +24,9 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const dispatch = useDispatch();
-  const countries = useSelector((state: RootState) => state.global.countries);
-  const queryOffset = useSelector(
-    (state: RootState) => state.global.queryOffset
-  );
-  const globalError = useSelector((state: RootState) => state.global.error);
+  const countries = useSelector(selectCountries);
+  const queryOffset = useSelector(selectQueryOffset);
+  const globalError = useSelector(selectError);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
