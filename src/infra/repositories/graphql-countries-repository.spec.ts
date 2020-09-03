@@ -234,5 +234,13 @@ describe("GraphqlCountriesRepository", () => {
       const result = await sut.loadBy({ name: faker.address.country() });
       expect(result).toBeNull();
     });
+    it("should throws UnexpectedError if apollo.query throws", () => {
+      const sut = sutFactory();
+      jest
+        .spyOn(ApolloClient.prototype, "query")
+        .mockRejectedValueOnce(new Error());
+      const result = sut.loadBy({ name: faker.address.country() });
+      expect(result).rejects.toThrow(new UnexpectedError());
+    });
   });
 });
