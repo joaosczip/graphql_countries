@@ -8,6 +8,6 @@ export class RemoteFindCountries implements FindCountries {
 
   async find({ name }: FindCountries.Params): Promise<FindCountries.Result> {
     await this.loadCountriesRepository.loadBy({ name });
-    return null;
+    return [];
   }
 }
