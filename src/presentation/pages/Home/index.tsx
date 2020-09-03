@@ -8,7 +8,11 @@ import {
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
-import { Error as ErrorComponent, ErrorAlert } from "@/presentation/components";
+import {
+  Error as ErrorComponent,
+  ErrorAlert,
+  HeaderBar,
+} from "@/presentation/components";
 import { Container, CountriesContainer } from "./styles";
 import {
   selectCountries,
@@ -56,34 +60,37 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   }, [handleLoadCountries, countries.length]);
 
   return (
-    <div style={{ position: "relative" }}>
-      {error && (
-        <div>
-          <ErrorComponent error={error} />
-        </div>
-      )}
-      <Container data-testid="container">
-        <CountriesContainer
-          dataLength={countries.length}
-          next={updateCountriesList}
-          hasMore={true}
-          loader={!error ? <SkeletonCards /> : null}
-        >
-          <div data-testid="countries-container">
-            {countries.length &&
-              countries.map((country) => (
-                <CountryCard key={country.id} {...country} />
-              ))}
+    <>
+      <HeaderBar />
+      <div style={{ position: "relative" }}>
+        {error && (
+          <div>
+            <ErrorComponent error={error} />
           </div>
-        </CountriesContainer>
-      </Container>
-      {globalError && (
-        <ErrorAlert
-          error={globalError}
-          handleClose={() => dispatch(setCurrentError(error))}
-        />
-      )}
-    </div>
+        )}
+        <Container data-testid="container">
+          <CountriesContainer
+            dataLength={countries.length}
+            next={updateCountriesList}
+            hasMore={true}
+            loader={!error ? <SkeletonCards /> : null}
+          >
+            <div data-testid="countries-container">
+              {countries.length &&
+                countries.map((country) => (
+                  <CountryCard key={country.id} {...country} />
+                ))}
+            </div>
+          </CountriesContainer>
+        </Container>
+        {globalError && (
+          <ErrorAlert
+            error={globalError}
+            handleClose={() => dispatch(setCurrentError(error))}
+          />
+        )}
+      </div>
+    </>
   );
 };
 
