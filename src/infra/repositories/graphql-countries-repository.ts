@@ -117,10 +117,23 @@ export class GraphqlCountriesRepository
         }
       `;
 
-      await this.client.query({ query });
-      return null;
+      const queryResult = await this.client.query({ query });
+      if (!queryResult.data.Country.length) {
+        return null;
+      }
+
+      return this.mapValues(queryResult.data.Country);
     } catch {
       throw new UnexpectedError();
     }
+  }
+
+  private mapValues(countries: any[]): LoadCountriesRepository.Result {
+    return countries.map(({ _id, name, capital, flag }) => ({
+      id: _id,
+      name,
+      capital,
+      flag: flag.svgFile,
+    }));
   }
 }
