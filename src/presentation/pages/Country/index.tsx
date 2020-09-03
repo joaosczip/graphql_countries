@@ -24,13 +24,19 @@ type Country = ShowCountry.Result;
 const Country: React.FC<Props> = ({ showCountry }) => {
   const [country, setCountry] = useState<Country>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error>();
   const { countryId } = useParams();
 
   useEffect(() => {
     async function loadCountry() {
-      const queryResult = await showCountry.find(countryId);
-      setCountry(queryResult);
-      setLoading(false);
+      try {
+        const queryResult = await showCountry.find(countryId);
+        setCountry(queryResult);
+      } catch (error) {
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
     }
     loadCountry();
   }, [countryId, showCountry]);
@@ -40,7 +46,11 @@ const Country: React.FC<Props> = ({ showCountry }) => {
 
   return (
     <Container>
-      {loading ? (
+      {error ? (
+        <div data-testid="error-container">
+          <span data-testid="error-message">{error.message}</span>
+        </div>
+      ) : loading ? (
         <CountrySkeleton />
       ) : (
         <Card data-testid="country-container">
