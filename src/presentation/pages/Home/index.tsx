@@ -63,7 +63,11 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
 
   useEffect(() => {
     async function handleSearchCountries() {
-      await findCountries.find({ name: searchTerm });
+      try {
+        await findCountries.find({ name: searchTerm });
+      } catch (error) {
+        setError(error);
+      }
     }
     handleSearchCountries();
   }, [searchTerm, findCountries]);
