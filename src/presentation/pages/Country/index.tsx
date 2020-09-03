@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+} from "@material-ui/core";
 import {
   CenterFocusStrongOutlined,
   PeopleOutlined,
@@ -13,7 +18,7 @@ import {
   LanguageOutlined,
 } from "@material-ui/icons";
 import { ShowCountry } from "@/domain/usecases";
-import CountrySkeleton from "./components/CountrySkeleton";
+import { CountrySkeleton } from "./components";
 import { setCurrentError } from "@/presentation/redux/actions";
 import { Container } from "./styles";
 
