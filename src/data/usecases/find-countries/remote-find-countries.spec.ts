@@ -43,4 +43,9 @@ describe("RemoteFindCountries", () => {
     const result = await sut.find(makeFakeParams());
     expect(result).toEqual([]);
   });
+  it("should returns the countries list on success", async () => {
+    const { sut, loadCountriesRepositorySpy } = sutFactory();
+    const result = await sut.find(makeFakeParams());
+    expect(result).toEqual(loadCountriesRepositorySpy.countries);
+  });
 });
