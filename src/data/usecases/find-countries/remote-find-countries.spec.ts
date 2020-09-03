@@ -28,4 +28,13 @@ describe("RemoteFindCountries", () => {
     await sut.find(params);
     expect(loadCountriesRepositorySpy.params).toEqual(params);
   });
+  it("should throws if LoadCountriesRepository throws", () => {
+    const { sut, loadCountriesRepositorySpy } = sutFactory();
+    const error = new Error();
+    jest
+      .spyOn(loadCountriesRepositorySpy, "loadBy")
+      .mockRejectedValueOnce(error);
+    const result = sut.find(makeFakeParams());
+    expect(result).rejects.toThrow(error);
+  });
 });
