@@ -1,11 +1,17 @@
 import React, { useRef } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
+import CardContent from "@material-ui/core/CardContent";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
-import { Container, Search } from "./styles";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import { Container, Search, AutoComplete, SearchList } from "./styles";
 
 const useStyles = makeStyles((theme) => ({
   searchIcon: {
@@ -27,6 +33,12 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     [theme.breakpoints.up("md")]: {
       width: "20ch",
+    },
+  },
+  listItem: {
+    "&:hover": {
+      cursor: "pointer",
+      background: "#f3f3f3",
     },
   },
 }));
@@ -61,6 +73,37 @@ const HeaderBar: React.FC<Props> = ({ handleSearch }) => {
                 "data-testid": "search-input",
               }}
             />
+            <AutoComplete>
+              <CardContent>
+                <SearchList>
+                  <ListItem
+                    className={classes.listItem}
+                    alignItems="flex-start"
+                  >
+                    <ListItemAvatar>
+                      <Avatar
+                        alt="Nome do país"
+                        src="https://restcountries.eu/data/bra.svg"
+                      />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary="Brasil"
+                      secondary={
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          style={{ display: "inline" }}
+                          color="textPrimary"
+                        >
+                          Brasília
+                        </Typography>
+                      }
+                    />
+                  </ListItem>
+                  <Divider variant="inset" component="li" />
+                </SearchList>
+              </CardContent>
+            </AutoComplete>
           </Search>
         </Toolbar>
       </AppBar>
