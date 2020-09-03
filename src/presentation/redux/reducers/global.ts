@@ -1,7 +1,7 @@
 import GlobalTypes from "@/presentation/redux/types/global";
 import { Action } from "@/presentation/redux/actions/global";
 
-type State = {
+export type GlobalState = {
   error: Error;
 };
 
@@ -9,7 +9,7 @@ const INITAL_STATE = {
   error: null,
 };
 
-const globalReducer = (state = INITAL_STATE, action: Action): State => {
+const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
   switch (action.type) {
     case GlobalTypes.SET_CURRENT_ERROR:
       return {

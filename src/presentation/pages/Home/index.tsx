@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/presentation/redux/store";
 import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
-import { Error } from "@/presentation/components";
+import { Error as ErrorComponent } from "@/presentation/components";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
 import { Container, CountriesContainer } from "./styles";
 
 type Props = {
@@ -15,6 +19,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [queryOffset, setQueryOffset] = useState<number>(0);
+  const globalError = useSelector((state: RootState) => state.global.error);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -47,7 +52,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
     <div style={{ position: "relative" }}>
       {error && (
         <div>
-          <Error error={error} />
+          <ErrorComponent error={error} />
         </div>
       )}
       <Container data-testid="container">
@@ -65,6 +70,23 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           </div>
         </CountriesContainer>
       </Container>
+      {globalError && (
+        <Snackbar
+          data-testid="error-alert"
+          open={true}
+          autoHideDuration={3000}
+          onClose={() => {}}
+        >
+          <Alert
+            variant="filled"
+            elevation={6}
+            onClose={() => {}}
+            severity="error"
+          >
+            <span data-testid="error-message">{globalError.message}</span>
+          </Alert>
+        </Snackbar>
+      )}
     </div>
   );
 };
