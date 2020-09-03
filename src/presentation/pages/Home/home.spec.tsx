@@ -58,6 +58,7 @@ describe("Home", () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     const state = mockInitialState(null, null, []);
     const { findCountriesSpy } = sutFactory(loadCountriesSpy, state);
+    expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
     expect(findCountriesSpy.callsCount).toBe(0);
   });
   it("should shows the cards skeleton on loading", async () => {

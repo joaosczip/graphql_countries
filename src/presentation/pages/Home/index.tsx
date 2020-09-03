@@ -19,6 +19,7 @@ import {
   selectQueryOffset,
   selectError,
 } from "@/presentation/redux/selectors";
+import { BasicCountry } from "@/domain/models";
 
 type Props = {
   loadCountries: LoadCountries;
@@ -29,6 +30,7 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchItems, setSearchItems] = useState<BasicCountry[]>([]);
   const dispatch = useDispatch();
   const countries = useSelector(selectCountries);
   const queryOffset = useSelector(selectQueryOffset);
@@ -78,7 +80,7 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
 
   return (
     <>
-      <HeaderBar handleSearch={setSearchTerm} />
+      <HeaderBar handleSearch={setSearchTerm} searchList={searchItems} />
       <div style={{ position: "relative" }}>
         {error && (
           <div>

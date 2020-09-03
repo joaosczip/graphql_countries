@@ -12,6 +12,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { Container, Search, AutoComplete, SearchList } from "./styles";
+import { BasicCountry } from "@/domain/models";
 
 const useStyles = makeStyles((theme) => ({
   searchIcon: {
@@ -45,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
   handleSearch: (term: string) => void;
+  searchList: BasicCountry[];
 };
 
-const HeaderBar: React.FC<Props> = ({ handleSearch }) => {
+const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
   const classes = useStyles();
   const inputRef = useRef({} as HTMLInputElement);
 
@@ -73,37 +75,39 @@ const HeaderBar: React.FC<Props> = ({ handleSearch }) => {
                 "data-testid": "search-input",
               }}
             />
-            <AutoComplete>
-              <CardContent>
-                <SearchList>
-                  <ListItem
-                    className={classes.listItem}
-                    alignItems="flex-start"
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        alt="Nome do país"
-                        src="https://restcountries.eu/data/bra.svg"
+            {searchList.length && (
+              <AutoComplete data-testid="autocomplete">
+                <CardContent>
+                  <SearchList>
+                    <ListItem
+                      className={classes.listItem}
+                      alignItems="flex-start"
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="Nome do país"
+                          src="https://restcountries.eu/data/bra.svg"
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Brasil"
+                        secondary={
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            style={{ display: "inline" }}
+                            color="textPrimary"
+                          >
+                            Brasília
+                          </Typography>
+                        }
                       />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary="Brasil"
-                      secondary={
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          style={{ display: "inline" }}
-                          color="textPrimary"
-                        >
-                          Brasília
-                        </Typography>
-                      }
-                    />
-                  </ListItem>
-                  <Divider variant="inset" component="li" />
-                </SearchList>
-              </CardContent>
-            </AutoComplete>
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
+                  </SearchList>
+                </CardContent>
+              </AutoComplete>
+            )}
           </Search>
         </Toolbar>
       </AppBar>
