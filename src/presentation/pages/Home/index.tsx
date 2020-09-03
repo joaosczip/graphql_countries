@@ -49,7 +49,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           dataLength={countries.length}
           next={updateCountriesList}
           hasMore={true}
-          loader={<SkeletonCards />}
+          loader={!error ? <SkeletonCards /> : null}
         >
           <div data-testid="countries-container">
             {countries &&
