@@ -1,15 +1,22 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import faker from "faker";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import { globalReducer } from "@/presentation/redux/reducers";
 import Home from ".";
-import { LoadCountriesSpy, mockInitialState } from "@/presentation/test";
+import {
+  LoadCountriesSpy,
+  mockInitialState,
+  FindCountriesSpy,
+} from "@/presentation/test";
 
 type Sut = {
   loadCountriesSpy: LoadCountriesSpy;
+  findCountriesSpy: FindCountriesSpy;
 };
 
 const history = createMemoryHistory({ initialEntries: ["/"] });
@@ -19,15 +26,20 @@ const sutFactory = (
   loadCountriesSpy = new LoadCountriesSpy(),
   state = initialState
 ): Sut => {
+  const findCountriesSpy = new FindCountriesSpy();
   render(
     <Router history={history}>
       <Provider store={createStore(globalReducer, state as any)}>
-        <Home loadCountries={loadCountriesSpy} />
+        <Home
+          findCountries={findCountriesSpy}
+          loadCountries={loadCountriesSpy}
+        />
       </Provider>
     </Router>
   );
   return {
     loadCountriesSpy,
+    findCountriesSpy,
   };
 };
 
@@ -128,5 +140,16 @@ describe("Home", () => {
     expect(screen.queryByTestId("error-message")).toHaveTextContent(
       error.message
     );
+  });
+  it("should calls FindCountries on search", async () => {
+    const { findCountriesSpy } = sutFactory();
+    const searchInput = screen.getByTestId("search-input");
+    const search = faker.random.word();
+    userEvent.type(searchInput, search);
+    await waitFor(() => {
+      expect(findCountriesSpy.params).toEqual({
+        name: search,
+      });
+    });
   });
 });
