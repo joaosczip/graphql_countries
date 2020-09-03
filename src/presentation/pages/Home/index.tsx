@@ -5,7 +5,7 @@ import {
   setCurrentError,
   setQueryOffset,
 } from "@/presentation/redux/actions";
-import { LoadCountries } from "@/domain/usecases";
+import { LoadCountries, FindCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
 import {
@@ -22,11 +22,13 @@ import {
 
 type Props = {
   loadCountries: LoadCountries;
+  findCountries: FindCountries;
 };
 
-const Home: React.FC<Props> = ({ loadCountries }) => {
+const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
+  const [searchTerm, setSearchTerm] = useState<string>();
   const dispatch = useDispatch();
   const countries = useSelector(selectCountries);
   const queryOffset = useSelector(selectQueryOffset);
@@ -59,9 +61,16 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
     }
   }, [handleLoadCountries, countries.length]);
 
+  useEffect(() => {
+    async function handleSearchCountries() {
+      await findCountries.find({ name: searchTerm });
+    }
+    handleSearchCountries();
+  }, [searchTerm, findCountries]);
+
   return (
     <>
-      <HeaderBar />
+      <HeaderBar handleSearch={setSearchTerm} />
       <div style={{ position: "relative" }}>
         {error && (
           <div>

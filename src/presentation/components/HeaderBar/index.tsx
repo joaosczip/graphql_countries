@@ -31,7 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const HeaderBar: React.FC = () => {
+type Props = {
+  handleSearch: (term: string) => void;
+};
+
+const HeaderBar: React.FC<Props> = ({ handleSearch }) => {
   const classes = useStyles();
   const inputRef = useRef({} as HTMLInputElement);
 
@@ -45,13 +49,17 @@ const HeaderBar: React.FC = () => {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Pesquise um país..."
+              placeholder="Pesquise por um país..."
               inputRef={inputRef}
+              onChange={(e) => handleSearch(e.target.value)}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
-              inputProps={{ "aria-label": "search" }}
+              inputProps={{
+                "aria-label": "search",
+                "data-testid": "search-input",
+              }}
             />
           </Search>
         </Toolbar>
