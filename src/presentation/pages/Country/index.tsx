@@ -13,6 +13,7 @@ import {
 } from "@material-ui/icons";
 import { ShowCountry } from "@/domain/usecases";
 import CountrySkeleton from "./components/CountrySkeleton";
+import { Error } from "@/presentation/components";
 import { Container } from "./styles";
 
 type Props = {
@@ -47,9 +48,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
   return (
     <Container>
       {error ? (
-        <div data-testid="error-container">
-          <span data-testid="error-message">{error.message}</span>
-        </div>
+        <Error error={error} />
       ) : loading ? (
         <CountrySkeleton />
       ) : (
