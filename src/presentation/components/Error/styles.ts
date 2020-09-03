@@ -14,9 +14,4 @@ export const Main = styled.div`
     color: #fff;
     margin-bottom: 16px;
   }
-
-  img {
-    align-self: center;
-    border-radius: 50%;
-  }
 `;

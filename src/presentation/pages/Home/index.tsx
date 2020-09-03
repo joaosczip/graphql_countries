@@ -3,6 +3,7 @@ import { BasicCountry } from "@/domain/models";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
+import { Error } from "@/presentation/components";
 import { Container, CountriesContainer } from "./styles";
 
 type Props = {
@@ -58,14 +59,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
               ))}
           </div>
         </CountriesContainer>
-        {error && (
-          <div data-testid="error-container">
-            <span data-testid="error-message">{error.message}</span>
-            <button data-testid="reload" onClick={handleLoadCountries}>
-              Tentar novamente
-            </button>
-          </div>
-        )}
+        {error && <Error error={error} />}
       </Container>
     </div>
   );

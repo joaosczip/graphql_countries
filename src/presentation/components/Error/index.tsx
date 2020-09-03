@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, CardContent } from "@material-ui/core";
-import errorImage from "@/presentation/assets/error.png";
 import { Container, Main } from "./styles";
 
 type Props = {
@@ -14,7 +13,6 @@ const Error: React.FC<Props> = ({ error }) => {
         <CardContent>
           <Main>
             <span data-testid="error-message">{error.message}</span>
-            <img src={errorImage} alt="Imagem de Erro" />
           </Main>
         </CardContent>
       </Card>
