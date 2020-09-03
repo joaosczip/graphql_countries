@@ -45,6 +45,11 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
 
   return (
     <div style={{ position: "relative" }}>
+      {error && (
+        <div>
+          <Error error={error} />
+        </div>
+      )}
       <Container data-testid="container">
         <CountriesContainer
           dataLength={countries.length}
@@ -59,7 +64,6 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
               ))}
           </div>
         </CountriesContainer>
-        {error && <Error error={error} />}
       </Container>
     </div>
   );

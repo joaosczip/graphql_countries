@@ -3,6 +3,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 export const Container = styled.div`
   align-items: center;
+  justify-content: center;
   position: absolute;
   top: 10vh;
 `;
