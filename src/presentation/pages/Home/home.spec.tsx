@@ -24,9 +24,9 @@ const initialState = mockInitialState();
 
 const sutFactory = (
   loadCountriesSpy = new LoadCountriesSpy(),
-  state = initialState
+  state = initialState,
+  findCountriesSpy = new FindCountriesSpy()
 ): Sut => {
-  const findCountriesSpy = new FindCountriesSpy();
   render(
     <Router history={history}>
       <Provider store={createStore(globalReducer, state as any)}>
@@ -150,6 +150,22 @@ describe("Home", () => {
       expect(findCountriesSpy.params).toEqual({
         name: search,
       });
+    });
+  });
+  it("should shows error if FindCountries throws", async () => {
+    const findCountriesSpy = new FindCountriesSpy();
+    const error = new Error("Error while searching countries");
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, loadCountriesSpy.countries);
+    jest.spyOn(findCountriesSpy, "find").mockRejectedValueOnce(error);
+    sutFactory(loadCountriesSpy, state, findCountriesSpy);
+    const searchInput = screen.getByTestId("search-input");
+    const search = faker.random.word();
+    userEvent.type(searchInput, search);
+    await waitFor(() => {
+      expect(screen.queryByTestId("error-message")).toHaveTextContent(
+        error.message
+      );
     });
   });
 });
