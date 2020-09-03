@@ -66,62 +66,64 @@ const Country: React.FC<Props> = ({ showCountry }) => {
       {loading ? (
         <CountrySkeleton />
       ) : (
-        <Card data-testid="country-container">
-          <CardMedia component="img" image={country?.flag} height="260" />
-          <CardContent>
-            <Typography
-              data-testid="country-name"
-              gutterBottom
-              variant="h3"
-              component="h3"
-            >
-              {country?.name}
-            </Typography>
-            <List component="nav" aria-label="main mailbox folders">
-              <ListItem button>
-                <ListItemIcon>
-                  <CenterFocusStrongOutlined />
-                </ListItemIcon>
-                <ListItemText
-                  data-testid="capital"
-                  primary={`Capital: ${country?.capital}`}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <PeopleOutlined />
-                </ListItemIcon>
-                <ListItemText
-                  data-testid="population"
-                  primary={`População: ${formatNum(country?.population)}`}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <AspectRatio />
-                </ListItemIcon>
-                <ListItemText
-                  data-testid="area"
-                  primary={`Área: ${formatNum(country?.area)} m²`}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <LanguageOutlined />
-                </ListItemIcon>
-                <ListItemText
-                  data-testid="top-level"
-                  primary={`Domínio de topo: ${country?.topLevelDomain}`}
-                />
-              </ListItem>
-            </List>
-          </CardContent>
-          <CardActions>
-            <Button onClick={() => setOpenModal(true)} data-testid="update">
-              Editar
-            </Button>
-          </CardActions>
-        </Card>
+        country && (
+          <Card data-testid="country-container">
+            <CardMedia component="img" image={country.flag} height="260" />
+            <CardContent>
+              <Typography
+                data-testid="country-name"
+                gutterBottom
+                variant="h3"
+                component="h3"
+              >
+                {country.name}
+              </Typography>
+              <List component="nav" aria-label="main mailbox folders">
+                <ListItem button>
+                  <ListItemIcon>
+                    <CenterFocusStrongOutlined />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="capital"
+                    primary={`Capital: ${country.capital}`}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <PeopleOutlined />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="population"
+                    primary={`População: ${formatNum(country.population)}`}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <AspectRatio />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="area"
+                    primary={`Área: ${formatNum(country.area)} m²`}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <LanguageOutlined />
+                  </ListItemIcon>
+                  <ListItemText
+                    data-testid="top-level"
+                    primary={`Domínio de topo: ${country.topLevelDomain}`}
+                  />
+                </ListItem>
+              </List>
+            </CardContent>
+            <CardActions>
+              <Button onClick={() => setOpenModal(true)} data-testid="update">
+                Editar
+              </Button>
+            </CardActions>
+          </Card>
+        )
       )}
     </Container>
   );

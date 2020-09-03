@@ -9,6 +9,7 @@ module.exports = {
     "!<rootDir>/src/presentation/styles/*.ts",
     "!<rootDir>/src/**/protocols/*.ts",
     "!<rootDir>/src/**/index.ts",
+    "!<rootDir>/src/presentation/redux/(root-reducer|store).ts",
   ],
   coverageDirectory: "coverage",
   testEnvironment: "jsdom",
