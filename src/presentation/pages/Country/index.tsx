@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
@@ -13,7 +14,7 @@ import {
 } from "@material-ui/icons";
 import { ShowCountry } from "@/domain/usecases";
 import CountrySkeleton from "./components/CountrySkeleton";
-import { Error } from "@/presentation/components";
+import { setCurrentError } from "@/presentation/redux/actions";
 import { Container } from "./styles";
 
 type Props = {
@@ -25,9 +26,9 @@ type Country = ShowCountry.Result;
 const Country: React.FC<Props> = ({ showCountry }) => {
   const [country, setCountry] = useState<Country>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error>();
   const { countryId } = useParams();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function loadCountry() {
@@ -35,23 +36,21 @@ const Country: React.FC<Props> = ({ showCountry }) => {
         const queryResult = await showCountry.find(countryId);
         setCountry(queryResult);
       } catch (error) {
-        setError(error);
+        dispatch(setCurrentError(error));
         history.replace("/");
       } finally {
         setLoading(false);
       }
     }
     loadCountry();
-  }, [countryId, showCountry, history]);
+  }, [countryId, showCountry, history, dispatch]);
 
   const formatNum = (num: number): string =>
     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
 
   return (
     <Container>
-      {error ? (
-        <Error error={error} />
-      ) : loading ? (
+      {loading ? (
         <CountrySkeleton />
       ) : (
         <Card data-testid="country-container">
