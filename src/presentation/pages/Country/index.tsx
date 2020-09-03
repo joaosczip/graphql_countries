@@ -9,7 +9,9 @@ import {
   Card,
   CardMedia,
   CardContent,
+  CardActions,
   Typography,
+  Button,
 } from "@material-ui/core";
 import {
   CenterFocusStrongOutlined,
@@ -18,7 +20,7 @@ import {
   LanguageOutlined,
 } from "@material-ui/icons";
 import { ShowCountry } from "@/domain/usecases";
-import { CountrySkeleton } from "./components";
+import { CountrySkeleton, UpdateCountry } from "./components";
 import { setCurrentError } from "@/presentation/redux/actions";
 import { Container } from "./styles";
 
@@ -31,6 +33,7 @@ type Country = ShowCountry.Result;
 const Country: React.FC<Props> = ({ showCountry }) => {
   const [country, setCountry] = useState<Country>();
   const [loading, setLoading] = useState<boolean>(true);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const { countryId } = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -55,6 +58,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
 
   return (
     <Container>
+      <UpdateCountry isOpen={openModal} />
       {loading ? (
         <CountrySkeleton />
       ) : (
@@ -108,6 +112,11 @@ const Country: React.FC<Props> = ({ showCountry }) => {
               </ListItem>
             </List>
           </CardContent>
+          <CardActions>
+            <Button onClick={() => setOpenModal(true)} data-testid="update">
+              Editar
+            </Button>
+          </CardActions>
         </Card>
       )}
     </Container>
