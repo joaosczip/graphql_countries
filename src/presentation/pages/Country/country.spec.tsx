@@ -1,15 +1,17 @@
 import React from "react";
 import faker from "faker";
+import configureStore from "redux-mock-store";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
-import { Provider } from "react-redux";
+import redux, { Provider } from "react-redux";
 import { globalReducer } from "@/presentation/redux/reducers";
 import { RootState } from "@/presentation/redux/store";
 import Country from ".";
 import { ShowCountrySpy, mockInitialState } from "@/presentation/test";
 import { mockBasicCountries } from "@/domain/test";
+import { setCurrentCountry, updateCountry } from "@/presentation/redux/actions";
 
 const fakeCountryId = faker.random.number();
 jest.mock("react-router-dom", () => ({
@@ -140,89 +142,90 @@ describe("Country", () => {
       showCountrySpy.country.topLevelDomain
     );
   });
-  // it.only("should update the country info", async () => {
-  //   const showCountrySpy = new ShowCountrySpy();
-  //   const countries = mockBasicCountries();
-  //   countries.push(showCountrySpy.country);
-  //   const state = mockInitialState(null, showCountrySpy.country, countries)
-  //     .global;
-  //   const store = createStore(globalReducer, state as any);
-  //   render(
-  //     <Router history={history}>
-  //       <Provider store={store}>
-  //         <Country showCountry={showCountrySpy} />
-  //       </Provider>
-  //     </Router>
-  //   );
+  it.skip("should update the country info", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    const countries = mockBasicCountries();
+    countries.push(showCountrySpy.country);
+    const state = mockInitialState(null, showCountrySpy.country, countries);
+    // const store = createStore(globalReducer, state as any);
 
-  //   const updateButton = await screen.findByTestId("update");
-  //   fireEvent.click(updateButton);
+    const mockStore = configureStore([]);
+    const store = mockStore(state);
 
-  //   await screen.findByTestId("update-country");
+    render(
+      <Router history={history}>
+        <Provider store={store}>
+          <Country showCountry={showCountrySpy} />
+        </Provider>
+      </Router>
+    );
 
-  //   const newValues = {
-  //     name: faker.address.country(),
-  //     capital: faker.address.city(),
-  //     population: faker.random.number(),
-  //     area: faker.random.number(),
-  //     topLevel: faker.random.word(),
-  //   };
+    const updateButton = await screen.findByTestId("update");
+    fireEvent.click(updateButton);
 
-  //   const nameInput = screen.getByTestId("name-input") as HTMLInputElement;
-  //   const capitalInput = screen.getByTestId(
-  //     "capital-input"
-  //   ) as HTMLInputElement;
-  //   const populationInput = screen.getByTestId(
-  //     "population-input"
-  //   ) as HTMLInputElement;
-  //   const areaInput = screen.getByTestId("area-input") as HTMLInputElement;
-  //   const topLevelDomainInput = screen.getByTestId(
-  //     "top-level-input"
-  //   ) as HTMLInputElement;
+    await screen.findByTestId("update-country");
 
-  //   fireEvent.input(nameInput, { target: { value: newValues.name } });
-  //   fireEvent.input(capitalInput, { target: { value: newValues.capital } });
-  //   fireEvent.input(populationInput, {
-  //     target: { value: String(newValues.population) },
-  //   });
-  //   fireEvent.input(areaInput, { target: { value: String(newValues.area) } });
-  //   fireEvent.input(topLevelDomainInput, {
-  //     target: { value: newValues.topLevel },
-  //   });
+    const newValues = {
+      name: faker.address.country(),
+      capital: faker.address.city(),
+      population: faker.random.number(),
+      area: faker.random.number(),
+      topLevel: faker.random.word(),
+    };
 
-  //   // const dispatchSpy = jest.spyOn(store, "dispatch");
-  //   screen.getByTestId("submit").click();
-  //   jest.spyOn(selectors, "selectCurrentCountry").mockReturnValueOnce({
-  //     ...showCountrySpy.country,
-  //     ...newValues,
-  //   });
-  //   // expect(dispatchSpy).toHaveBeenCalled();
+    const nameInput = screen.getByTestId("name-input") as HTMLInputElement;
+    const capitalInput = screen.getByTestId(
+      "capital-input"
+    ) as HTMLInputElement;
+    const populationInput = screen.getByTestId(
+      "population-input"
+    ) as HTMLInputElement;
+    const areaInput = screen.getByTestId("area-input") as HTMLInputElement;
+    const topLevelDomainInput = screen.getByTestId(
+      "top-level-input"
+    ) as HTMLInputElement;
 
-  //   await waitFor(() => {
-  //     expect(screen.getByTestId("country-container")).toBeInTheDocument();
-  //   });
+    fireEvent.input(nameInput, { target: { value: newValues.name } });
+    fireEvent.input(capitalInput, { target: { value: newValues.capital } });
+    fireEvent.input(populationInput, {
+      target: { value: String(newValues.population) },
+    });
+    fireEvent.input(areaInput, { target: { value: String(newValues.area) } });
+    fireEvent.input(topLevelDomainInput, {
+      target: { value: newValues.topLevel },
+    });
 
-  //   const formatNum = (num) =>
-  //     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
+    const newCountry = {
+      ...showCountrySpy.country,
+      ...newValues,
+    };
+    store.dispatch(
+      updateCountry({
+        country: newCountry,
+        countries,
+      })
+    );
+    await waitFor(() => {
+      expect(screen.getByTestId("country-container")).toBeInTheDocument();
+    });
 
-  //   // expect(countryContainer.querySelector("img")).toHaveAttribute(
-  //   //   "src",
-  //   //   showCountrySpy.country.flag
-  //   // );
-  //   expect(screen.getByTestId("country-name")).toHaveTextContent(
-  //     newValues.name
-  //   );
-  //   expect(
-  //     screen.getByTestId("capital").querySelector("span")
-  //   ).toHaveTextContent(`Capital: ${newValues.capital}`);
-  //   expect(
-  //     screen.getByTestId("population").querySelector("span")
-  //   ).toHaveTextContent(`População: ${formatNum(newValues.population)}`);
-  //   expect(screen.getByTestId("area").querySelector("span")).toHaveTextContent(
-  //     `Área: ${formatNum(newValues.area)} m²`
-  //   );
-  //   expect(
-  //     screen.getByTestId("top-level").querySelector("span")
-  //   ).toHaveTextContent(`Domínio de topo: ${newValues.topLevel}`);
-  // });
+    const formatNum = (num) =>
+      new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
+
+    expect(screen.getByTestId("country-name")).toHaveTextContent(
+      newCountry.name
+    );
+    expect(
+      screen.getByTestId("capital").querySelector("span")
+    ).toHaveTextContent(`Capital: ${newCountry.capital}`);
+    expect(
+      screen.getByTestId("population").querySelector("span")
+    ).toHaveTextContent(`População: ${formatNum(newCountry.population)}`);
+    expect(screen.getByTestId("area").querySelector("span")).toHaveTextContent(
+      `Área: ${formatNum(newCountry.area)} m²`
+    );
+    expect(
+      screen.getByTestId("top-level").querySelector("span")
+    ).toHaveTextContent(`Domínio de topo: ${newCountry.topLevelDomain}`);
+  });
 });

@@ -96,7 +96,7 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
-        <Main>
+        <Main data-testid="form">
           {country && (
             <Card className={classes.paper}>
               <CardContent>
