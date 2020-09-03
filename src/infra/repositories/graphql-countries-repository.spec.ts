@@ -242,5 +242,25 @@ describe("GraphqlCountriesRepository", () => {
       const result = sut.loadBy({ name: faker.address.country() });
       expect(result).rejects.toThrow(new UnexpectedError());
     });
+    it("should returns the countries on success", async () => {
+      const sut = sutFactory();
+
+      const firstCountry = mockBasicCountry();
+      const secondCountry = mockBasicCountry();
+
+      const basicCountries = mockQueryResult(firstCountry, secondCountry);
+
+      jest
+        .spyOn(ApolloClient.prototype, "query")
+        .mockResolvedValueOnce(basicCountries as ApolloQueryResult<any>);
+
+      const result = await sut.loadBy({ name: faker.address.country() });
+
+      const expected = [
+        { ...firstCountry, flag: basicCountries.data.Country[0].flag.svgFile },
+        { ...secondCountry, flag: basicCountries.data.Country[1].flag.svgFile },
+      ];
+      expect(result).toEqual(expected);
+    });
   });
 });
