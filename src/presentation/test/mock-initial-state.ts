@@ -1,12 +1,14 @@
 import { RootState } from "@/presentation/redux/store";
-import { mockCountry } from "@/domain/test";
+import { mockCountry, mockBasicCountries } from "@/domain/test";
 
 export const mockInitialState = (
   error = null,
-  currentCountry = mockCountry()
+  currentCountry = mockCountry(),
+  countries = mockBasicCountries()
 ): RootState => ({
   global: {
     error,
     currentCountry,
+    countries,
   },
 });

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/presentation/redux/store";
-import { setCurrentError } from "@/presentation/redux/actions";
-import { BasicCountry } from "@/domain/models";
+import { setCountries, setCurrentError } from "@/presentation/redux/actions";
 import { LoadCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
@@ -14,12 +13,12 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({ loadCountries }) => {
-  const [countries, setCountries] = useState<BasicCountry[]>([]);
   const [error, setError] = useState<Error>();
   const [defaultLimit] = useState<number>(12);
   const [queryOffset, setQueryOffset] = useState<number>(0);
   const dispatch = useDispatch();
   const globalError = useSelector((state: RootState) => state.global.error);
+  const countries = useSelector((state: RootState) => state.global.countries);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -28,12 +27,12 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           offset,
           limit: defaultLimit,
         });
-        setCountries((oldCountries) => [...oldCountries, ...countriesResult]);
+        dispatch(setCountries(countriesResult));
       } catch (error) {
         setError(error);
       }
     },
-    [loadCountries, defaultLimit]
+    [loadCountries, defaultLimit, dispatch]
   );
 
   const updateCountriesList = useCallback(async () => {
@@ -63,7 +62,7 @@ const Home: React.FC<Props> = ({ loadCountries }) => {
           loader={!error ? <SkeletonCards /> : null}
         >
           <div data-testid="countries-container">
-            {countries &&
+            {countries.length &&
               countries.map((country) => (
                 <CountryCard key={country.id} {...country} />
               ))}

@@ -33,7 +33,9 @@ const sutFactory = (
 
 describe("Home", () => {
   it("should calls LoadCountries on load", () => {
-    const { loadCountriesSpy } = sutFactory();
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, []);
+    sutFactory(loadCountriesSpy, state);
     expect(loadCountriesSpy.callsCount).toBe(1);
     expect(loadCountriesSpy.params).toEqual({
       offset: 0,
@@ -46,7 +48,9 @@ describe("Home", () => {
     expect(spinner).toBeInTheDocument();
   });
   it("should renders the correct countries", async () => {
-    const { loadCountriesSpy } = sutFactory();
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
     const container = await screen.findByTestId("countries-container");
     expect(container.children).toHaveLength(loadCountriesSpy.countries.length);
 
@@ -70,10 +74,11 @@ describe("Home", () => {
   });
   it("should display an error message if LoadCountries throws", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, []);
     const error = new Error("Error loading countries");
     jest.spyOn(loadCountriesSpy, "load").mockRejectedValueOnce(error);
 
-    sutFactory(loadCountriesSpy);
+    sutFactory(loadCountriesSpy, state);
 
     const container = await screen.findByTestId("countries-container");
     expect(container.children).toHaveLength(0);
@@ -87,22 +92,26 @@ describe("Home", () => {
   it("should display nothing on countries if empty", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     loadCountriesSpy.countries = [];
-    sutFactory(loadCountriesSpy);
+    const state = mockInitialState(null, null, []);
+    sutFactory(loadCountriesSpy, state);
     const container = await screen.findByTestId("countries-container");
     expect(container.children).toHaveLength(0);
   });
   it("should calls LoadCountries with different offset on scroll", async () => {
-    const { loadCountriesSpy } = sutFactory();
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
     fireEvent.scroll(window, { y: 1000 });
     await screen.findByTestId("countries-container");
-    expect(loadCountriesSpy.callsCount).toBe(2);
     expect(loadCountriesSpy.params).toEqual({
       offset: 12,
       limit: 12,
     });
   });
   it("should redirect to the country page on details button click", async () => {
-    const { loadCountriesSpy } = sutFactory();
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const state = mockInitialState(null, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
     const country = loadCountriesSpy.countries[0];
     const container = await screen.findByTestId("countries-container");
     const detailsButton = container.children[0].querySelectorAll("button")[1];
@@ -112,11 +121,8 @@ describe("Home", () => {
   it("should display an alert with error message on global error", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     const error = new Error("Ops");
-    sutFactory(loadCountriesSpy, {
-      global: {
-        error,
-      },
-    });
+    const state = mockInitialState(error, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
     await screen.findByTestId("countries-container");
     expect(screen.queryByTestId("error-alert")).toBeInTheDocument();
     expect(screen.queryByTestId("error-message")).toHaveTextContent(

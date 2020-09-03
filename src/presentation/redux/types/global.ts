@@ -1,9 +1,11 @@
 type GlobalTypes = {
+  SET_COUNTRIES: string;
   SET_CURRENT_ERROR: string;
   SET_CURRENT_COUNTRY: string;
 };
 
 export default {
+  SET_COUNTRIES: "SET_COUNTRIES",
   SET_CURRENT_ERROR: "SET_CURRENT_ERROR",
   SET_CURRENT_COUNTRY: "SET_CURRENT_COUNTRY",
 } as GlobalTypes;

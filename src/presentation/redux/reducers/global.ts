@@ -1,19 +1,26 @@
 import GlobalTypes from "@/presentation/redux/types/global";
 import { Action } from "@/presentation/redux/actions/global";
-import { Country } from "@/domain/models";
+import { Country, BasicCountry } from "@/domain/models";
 
 export type GlobalState = {
-  error: Error;
+  countries: BasicCountry[];
   currentCountry: Country;
+  error: Error;
 };
 
 const INITAL_STATE: GlobalState = {
+  countries: [],
   error: null,
   currentCountry: null,
 };
 
 const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
   switch (action.type) {
+    case GlobalTypes.SET_COUNTRIES:
+      return {
+        ...state,
+        countries: [...state.countries, ...action.payload],
+      };
     case GlobalTypes.SET_CURRENT_ERROR:
       return {
         ...state,
