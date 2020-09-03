@@ -1,6 +1,6 @@
 import React from "react";
 import faker from "faker";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
@@ -94,5 +94,11 @@ describe("Country", () => {
       expect(screen.queryByTestId("country-container")).not.toBeInTheDocument();
     });
     expect(history.location.pathname).toBe("/");
+  });
+  it("should open the update country modal on update button click", async () => {
+    sutFactory({});
+    const updateButton = await screen.findByTestId("update");
+    fireEvent.click(updateButton);
+    expect(screen.queryByTestId("update-country")).toBeInTheDocument();
   });
 });
