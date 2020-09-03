@@ -37,3 +37,13 @@ export const setQueryOffset = (
   type: GlobalTypes.SET_QUERY_OFFSET,
   payload: offset,
 });
+
+type UpdatePayload = {
+  country: Country;
+  countries: BasicCountry[];
+};
+
+export const updateCountry = (payload: UpdatePayload) => ({
+  type: GlobalTypes.UPDATE_COUNTRY,
+  payload,
+});

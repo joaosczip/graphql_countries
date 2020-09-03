@@ -9,6 +9,7 @@ import { globalReducer } from "@/presentation/redux/reducers";
 import { RootState } from "@/presentation/redux/store";
 import Country from ".";
 import { ShowCountrySpy, mockInitialState } from "@/presentation/test";
+import { mockBasicCountries } from "@/domain/test";
 
 const fakeCountryId = faker.random.number();
 jest.mock("react-router-dom", () => ({
@@ -24,19 +25,19 @@ const history = createMemoryHistory({
   initialEntries: [`/country/${fakeCountryId}`],
 });
 
-const initialState = mockInitialState();
-
 type SutParams = {
   showCountrySpy?: ShowCountrySpy;
   state?: RootState;
 };
+const initialState = mockInitialState();
 const sutFactory = ({
   showCountrySpy = new ShowCountrySpy(),
   state = initialState,
 }: SutParams): Sut => {
+  const store = createStore(globalReducer, state as any);
   render(
     <Router history={history}>
-      <Provider store={createStore(globalReducer, state as any)}>
+      <Provider store={store}>
         <Country showCountry={showCountrySpy} />
       </Provider>
     </Router>
@@ -105,11 +106,21 @@ describe("Country", () => {
   });
   it("should show the correct values on modal", async () => {
     const showCountrySpy = new ShowCountrySpy();
-    const state = mockInitialState(null, showCountrySpy.country);
-    sutFactory({ showCountrySpy, state });
+    const countries = mockBasicCountries();
+    countries.push(showCountrySpy.country);
+    const state = mockInitialState(null, showCountrySpy.country, countries);
+    sutFactory({
+      showCountrySpy,
+      state,
+    });
+
     const updateButton = await screen.findByTestId("update");
     fireEvent.click(updateButton);
-    await screen.findByTestId("update-country");
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("update-country")).toBeInTheDocument();
+    });
+
     expect(screen.getByTitle("title")).toHaveTextContent(
       showCountrySpy.country.name
     );
@@ -129,4 +140,89 @@ describe("Country", () => {
       showCountrySpy.country.topLevelDomain
     );
   });
+  // it.only("should update the country info", async () => {
+  //   const showCountrySpy = new ShowCountrySpy();
+  //   const countries = mockBasicCountries();
+  //   countries.push(showCountrySpy.country);
+  //   const state = mockInitialState(null, showCountrySpy.country, countries)
+  //     .global;
+  //   const store = createStore(globalReducer, state as any);
+  //   render(
+  //     <Router history={history}>
+  //       <Provider store={store}>
+  //         <Country showCountry={showCountrySpy} />
+  //       </Provider>
+  //     </Router>
+  //   );
+
+  //   const updateButton = await screen.findByTestId("update");
+  //   fireEvent.click(updateButton);
+
+  //   await screen.findByTestId("update-country");
+
+  //   const newValues = {
+  //     name: faker.address.country(),
+  //     capital: faker.address.city(),
+  //     population: faker.random.number(),
+  //     area: faker.random.number(),
+  //     topLevel: faker.random.word(),
+  //   };
+
+  //   const nameInput = screen.getByTestId("name-input") as HTMLInputElement;
+  //   const capitalInput = screen.getByTestId(
+  //     "capital-input"
+  //   ) as HTMLInputElement;
+  //   const populationInput = screen.getByTestId(
+  //     "population-input"
+  //   ) as HTMLInputElement;
+  //   const areaInput = screen.getByTestId("area-input") as HTMLInputElement;
+  //   const topLevelDomainInput = screen.getByTestId(
+  //     "top-level-input"
+  //   ) as HTMLInputElement;
+
+  //   fireEvent.input(nameInput, { target: { value: newValues.name } });
+  //   fireEvent.input(capitalInput, { target: { value: newValues.capital } });
+  //   fireEvent.input(populationInput, {
+  //     target: { value: String(newValues.population) },
+  //   });
+  //   fireEvent.input(areaInput, { target: { value: String(newValues.area) } });
+  //   fireEvent.input(topLevelDomainInput, {
+  //     target: { value: newValues.topLevel },
+  //   });
+
+  //   // const dispatchSpy = jest.spyOn(store, "dispatch");
+  //   screen.getByTestId("submit").click();
+  //   jest.spyOn(selectors, "selectCurrentCountry").mockReturnValueOnce({
+  //     ...showCountrySpy.country,
+  //     ...newValues,
+  //   });
+  //   // expect(dispatchSpy).toHaveBeenCalled();
+
+  //   await waitFor(() => {
+  //     expect(screen.getByTestId("country-container")).toBeInTheDocument();
+  //   });
+
+  //   const formatNum = (num) =>
+  //     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
+
+  //   // expect(countryContainer.querySelector("img")).toHaveAttribute(
+  //   //   "src",
+  //   //   showCountrySpy.country.flag
+  //   // );
+  //   expect(screen.getByTestId("country-name")).toHaveTextContent(
+  //     newValues.name
+  //   );
+  //   expect(
+  //     screen.getByTestId("capital").querySelector("span")
+  //   ).toHaveTextContent(`Capital: ${newValues.capital}`);
+  //   expect(
+  //     screen.getByTestId("population").querySelector("span")
+  //   ).toHaveTextContent(`População: ${formatNum(newValues.population)}`);
+  //   expect(screen.getByTestId("area").querySelector("span")).toHaveTextContent(
+  //     `Área: ${formatNum(newValues.area)} m²`
+  //   );
+  //   expect(
+  //     screen.getByTestId("top-level").querySelector("span")
+  //   ).toHaveTextContent(`Domínio de topo: ${newValues.topLevel}`);
+  // });
 });

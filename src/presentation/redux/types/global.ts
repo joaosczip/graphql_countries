@@ -3,6 +3,7 @@ type GlobalTypes = {
   SET_CURRENT_ERROR: string;
   SET_CURRENT_COUNTRY: string;
   SET_QUERY_OFFSET: string;
+  UPDATE_COUNTRY: string;
 };
 
 export default {
@@ -10,4 +11,5 @@ export default {
   SET_CURRENT_ERROR: "SET_CURRENT_ERROR",
   SET_CURRENT_COUNTRY: "SET_CURRENT_COUNTRY",
   SET_QUERY_OFFSET: "SET_QUERY_OFFSET",
+  UPDATE_COUNTRY: "UPDATE_COUNTRY",
 } as GlobalTypes;

@@ -1,6 +1,7 @@
+import { Country, BasicCountry } from "@/domain/models";
 import GlobalTypes from "@/presentation/redux/types/global";
 import { Action } from "@/presentation/redux/actions/global";
-import { Country, BasicCountry } from "@/domain/models";
+import { updateCountry } from "@/presentation/redux/helpers";
 
 export type GlobalState = {
   countries: BasicCountry[];
@@ -37,6 +38,16 @@ const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
       return {
         ...state,
         queryOffset: action.payload,
+      };
+    case GlobalTypes.UPDATE_COUNTRY:
+      const { countries, country } = updateCountry(
+        action.payload.countries,
+        action.payload.country
+      );
+      return {
+        ...state,
+        countries,
+        currentCountry: country,
       };
     default:
       return state;

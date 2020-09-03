@@ -62,7 +62,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
 
   return (
     <Container>
-      <UpdateCountry isOpen={openModal} />
+      <UpdateCountry openModal={openModal} setOpenModal={setOpenModal} />
       {loading ? (
         <CountrySkeleton />
       ) : (
