@@ -166,12 +166,11 @@ describe("Country", () => {
       expect(screen.queryByTestId("form")).not.toBeInTheDocument();
     });
   });
-  it.skip("should update the country info", async () => {
+  it("should close the update modal on form submit", async () => {
     const showCountrySpy = new ShowCountrySpy();
     const countries = mockBasicCountries();
     countries.push(showCountrySpy.country);
     const state = mockInitialState(null, showCountrySpy.country, countries);
-    // const store = createStore(globalReducer, state as any);
 
     const mockStore = configureStore([]);
     const store = mockStore(state);
@@ -187,7 +186,9 @@ describe("Country", () => {
     const updateButton = await screen.findByTestId("update");
     fireEvent.click(updateButton);
 
-    await screen.findByTestId("update-country");
+    await waitFor(() => {
+      expect(screen.queryByTestId("form")).toBeInTheDocument();
+    });
 
     const newValues = {
       name: faker.address.country(),
@@ -219,37 +220,10 @@ describe("Country", () => {
       target: { value: newValues.topLevel },
     });
 
-    const newCountry = {
-      ...showCountrySpy.country,
-      ...newValues,
-    };
-    store.dispatch(
-      updateCountry({
-        country: newCountry,
-        countries,
-      })
-    );
+    userEvent.click(screen.getByTestId("submit"));
+
     await waitFor(() => {
-      expect(screen.getByTestId("country-container")).toBeInTheDocument();
+      expect(screen.queryByTestId("form")).not.toBeInTheDocument();
     });
-
-    const formatNum = (num) =>
-      new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
-
-    expect(screen.getByTestId("country-name")).toHaveTextContent(
-      newCountry.name
-    );
-    expect(
-      screen.getByTestId("capital").querySelector("span")
-    ).toHaveTextContent(`Capital: ${newCountry.capital}`);
-    expect(
-      screen.getByTestId("population").querySelector("span")
-    ).toHaveTextContent(`População: ${formatNum(newCountry.population)}`);
-    expect(screen.getByTestId("area").querySelector("span")).toHaveTextContent(
-      `Área: ${formatNum(newCountry.area)} m²`
-    );
-    expect(
-      screen.getByTestId("top-level").querySelector("span")
-    ).toHaveTextContent(`Domínio de topo: ${newCountry.topLevelDomains}`);
   });
 });
