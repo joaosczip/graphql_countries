@@ -134,10 +134,10 @@ describe("Country", () => {
       showCountrySpy.country.capital
     );
     expect(screen.getByTestId("population-input")).toHaveValue(
-      String(showCountrySpy.country.population)
+      showCountrySpy.country.population
     );
     expect(screen.getByTestId("area-input")).toHaveValue(
-      String(showCountrySpy.country.area)
+      showCountrySpy.country.area
     );
     expect(screen.getByTestId("top-level-input")).toHaveValue(
       showCountrySpy.country.topLevelDomains

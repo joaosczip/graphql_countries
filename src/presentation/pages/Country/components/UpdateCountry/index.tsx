@@ -144,7 +144,8 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
                         label="População"
                         value={population}
                         onChange={(e) => setPopulation(Number(e.target.value))}
-                        type="text"
+                        type="number"
+                        inputMode="numeric"
                         variant="outlined"
                       />
                     </div>
@@ -155,7 +156,8 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
                       label="Área"
                       value={area}
                       onChange={(e) => setArea(Number(e.target.value))}
-                      type="text"
+                      type="number"
+                      inputMode="numeric"
                       variant="outlined"
                     />
                     <div style={{ width: "4%" }} />
