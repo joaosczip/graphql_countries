@@ -137,7 +137,7 @@ describe("Home", () => {
     detailsButton.click();
     expect(history.location.pathname).toBe(`/country/${country.id}`);
   });
-  it("should display an alert with error message on global error", async () => {
+  it("should display an alert with error message on error", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     const error = new Error("Ops");
     const state = mockInitialState(error, null, loadCountriesSpy.countries);
@@ -147,6 +147,19 @@ describe("Home", () => {
     expect(screen.queryByTestId("error-message")).toHaveTextContent(
       error.message
     );
+  });
+  it("should close the error alert on close button click", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const error = new Error("Ops");
+    const state = mockInitialState(error, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
+    await screen.findByTestId("countries-container");
+    const errorContainer = screen.queryByTestId("error-alert");
+    const closeButton = errorContainer.querySelector("button");
+    userEvent.click(closeButton);
+    await waitFor(() => {
+      expect(errorContainer).not.toBeInTheDocument();
+    });
   });
   it("should calls FindCountries on search", async () => {
     const { findCountriesSpy } = sutFactory();
