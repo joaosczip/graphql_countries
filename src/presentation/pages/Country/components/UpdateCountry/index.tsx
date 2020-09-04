@@ -108,7 +108,11 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
                   <Typography title="title" variant="h4" component="h4">
                     {country.name}
                   </Typography>
-                  <Button color="secondary">
+                  <Button
+                    onClick={() => setOpenModal(false)}
+                    data-testid="close-modal"
+                    color="secondary"
+                  >
                     <CloseOutlined />
                   </Button>
                 </div>
