@@ -55,6 +55,18 @@ describe("Country", () => {
     });
     expect(showCountrySpy.countryId).toEqual(fakeCountryId);
   });
+  it("should wait for the country to load", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    showCountrySpy.country = null;
+    const state = mockInitialState(null, showCountrySpy.country);
+    sutFactory({
+      showCountrySpy,
+      state,
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId("country-skeleton")).toBeInTheDocument();
+    });
+  });
   it("should hide the skeleton and present the correct country values", async () => {
     const showCountrySpy = new ShowCountrySpy();
     const state = mockInitialState(null, showCountrySpy.country);

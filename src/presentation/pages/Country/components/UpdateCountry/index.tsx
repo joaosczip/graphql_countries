@@ -51,7 +51,9 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!country) return;
+    if (!country) {
+      return;
+    }
 
     const { name, capital, population, area, topLevelDomains } = country;
     setName(name);
@@ -64,7 +66,9 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
   const isValid = (value: any) => Boolean(value);
 
   useEffect(() => {
-    if (!country) return;
+    if (!country) {
+      return;
+    }
 
     const isInvalid = [name, capital, population, area, topLevelDomains].filter(
       (field) => !isValid(field)
