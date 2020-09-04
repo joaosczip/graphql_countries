@@ -97,7 +97,7 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
         {error && (
           <ErrorAlert
             error={error}
-            handleClose={() => dispatch(setCurrentError(error))}
+            handleClose={() => dispatch(setCurrentError(null))}
           />
         )}
       </div>

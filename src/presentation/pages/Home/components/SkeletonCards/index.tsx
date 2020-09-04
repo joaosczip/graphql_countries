@@ -16,6 +16,10 @@ const SkeletonCards: React.FC = () => {
       <SkeletonCard />
       <SkeletonCard />
       <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
+      <SkeletonCard />
     </div>
   );
 };
