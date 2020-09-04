@@ -11,7 +11,7 @@ const ErrorAlert: React.FC<Props> = ({ error, handleClose }) => {
   return (
     <Snackbar
       data-testid="error-alert"
-      open={true}
+      open={Boolean(error)}
       autoHideDuration={5000}
       onClose={handleClose}
     >
