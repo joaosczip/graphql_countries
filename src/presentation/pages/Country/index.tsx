@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import { useDispatch, useSelector, useStore } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   List,
   ListItem,
@@ -41,8 +41,6 @@ const Country: React.FC<Props> = ({ showCountry }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const country = useSelector(selectCurrentCountry);
-  const store = useStore();
-  const [wasUpdated, setWasUpdated] = useState<boolean>(false);
 
   useEffect(() => {
     async function loadCountry() {
@@ -58,10 +56,6 @@ const Country: React.FC<Props> = ({ showCountry }) => {
     }
     loadCountry();
   }, [countryId, showCountry, history, dispatch]);
-
-  useEffect(() => {
-    setWasUpdated(store.getState().global.updated);
-  }, [store]);
 
   const formatNum = (num: number): string =>
     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
@@ -134,13 +128,6 @@ const Country: React.FC<Props> = ({ showCountry }) => {
             </CardActions>
           </Card>
         )
-      )}
-      {wasUpdated && (
-        <div data-testid="success">
-          <span data-testid="success-message">
-            As informações foram atualizadas!
-          </span>
-        </div>
       )}
     </Container>
   );
