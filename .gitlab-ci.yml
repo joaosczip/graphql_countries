@@ -9,6 +9,7 @@ services:
 test:
   stage: test
   image: node:12
+  only: master
   tags:
     - docker
   script:
@@ -20,6 +21,7 @@ test:
 build:
   stage: build
   image: node:12
+  only: master
   tags:
     - docker
   before_script:
@@ -33,6 +35,7 @@ build:
 deploy:
   stage: deploy
   image: slergberg/aws-deploy
+  only: master
   tags:
     - docker
   script:
