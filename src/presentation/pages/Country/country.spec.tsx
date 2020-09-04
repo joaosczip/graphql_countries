@@ -1,6 +1,5 @@
 import React from "react";
 import faker from "faker";
-import configureStore from "redux-mock-store";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Router } from "react-router-dom";
@@ -12,7 +11,6 @@ import { RootState } from "@/presentation/redux/store";
 import Country from ".";
 import { ShowCountrySpy, mockInitialState } from "@/presentation/test";
 import { mockBasicCountries } from "@/domain/test";
-import { updateCountry } from "@/presentation/redux/actions";
 
 const fakeCountryId = faker.random.number();
 jest.mock("react-router-dom", () => ({
@@ -167,21 +165,7 @@ describe("Country", () => {
     });
   });
   it("should close the update modal on form submit", async () => {
-    const showCountrySpy = new ShowCountrySpy();
-    const countries = mockBasicCountries();
-    countries.push(showCountrySpy.country);
-    const state = mockInitialState(null, showCountrySpy.country, countries);
-
-    const mockStore = configureStore([]);
-    const store = mockStore(state);
-
-    render(
-      <Router history={history}>
-        <Provider store={store}>
-          <Country showCountry={showCountrySpy} />
-        </Provider>
-      </Router>
-    );
+    sutFactory({});
 
     const updateButton = await screen.findByTestId("update");
     fireEvent.click(updateButton);
