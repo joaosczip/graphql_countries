@@ -87,10 +87,11 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
             loader={!error ? <SkeletonCards /> : null}
           >
             <div data-testid="countries-container">
-              {countries.length &&
-                countries.map((country) => (
-                  <CountryCard key={country.id} {...country} />
-                ))}
+              {countries.length
+                ? countries.map((country) => (
+                    <CountryCard key={country.id} {...country} />
+                  ))
+                : null}
             </div>
           </CountriesContainer>
         </Container>
