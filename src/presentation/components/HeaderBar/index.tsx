@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import CardContent from "@material-ui/core/CardContent";
@@ -52,6 +53,7 @@ type Props = {
 const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
   const classes = useStyles();
   const inputRef = useRef({} as HTMLInputElement);
+  const history = useHistory();
 
   return (
     <Container>
@@ -82,9 +84,11 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
                     {searchList.map(({ id, flag, name, capital }) => (
                       <>
                         <ListItem
+                          data-testid="list-item"
                           key={id}
                           className={classes.listItem}
                           alignItems="flex-start"
+                          onClick={() => history.push(`/country/${id}`)}
                         >
                           <ListItemAvatar>
                             <Avatar
