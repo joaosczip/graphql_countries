@@ -175,4 +175,26 @@ describe("Home", () => {
       );
     });
   });
+  it("should render the searched items on the autocomplete", async () => {
+    const { findCountriesSpy } = sutFactory();
+    const searchInput = screen.getByTestId("search-input");
+    const search = faker.random.word();
+    userEvent.type(searchInput, search);
+    await waitFor(() => {
+      expect(screen.queryByTestId("autocomplete")).toBeInTheDocument();
+    });
+
+    const { countries } = findCountriesSpy;
+    const flags = screen.getAllByTitle("search-flag");
+    const names = screen.getAllByTitle("search-name");
+    const capitals = screen.getAllByTitle("search-capital");
+
+    expect(flags[0]).toHaveAttribute("src", countries[0].flag);
+    expect(names[0]).toHaveTextContent(countries[0].name);
+    expect(capitals[0]).toHaveTextContent(countries[0].capital);
+
+    expect(flags[1]).toHaveAttribute("src", countries[1].flag);
+    expect(names[1]).toHaveTextContent(countries[1].name);
+    expect(capitals[1]).toHaveTextContent(countries[1].capital);
+  });
 });
