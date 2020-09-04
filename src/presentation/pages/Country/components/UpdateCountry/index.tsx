@@ -47,12 +47,12 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
 
   useEffect(() => {
     if (country) {
-      const { name, capital, population, area, topLevelDomain } = country;
+      const { name, capital, population, area, topLevelDomains } = country;
       setName(name);
       setCapital(capital);
       setPopulation(population);
       setArea(area);
-      setTopLevelDomains(topLevelDomain);
+      setTopLevelDomains(topLevelDomains);
     }
   }, [country]);
 
@@ -66,7 +66,7 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
             capital,
             population,
             area,
-            topLevelDomain: topLevelDomains,
+            topLevelDomains,
             id: country.id,
             flag: country.flag,
           },

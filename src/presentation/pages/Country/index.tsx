@@ -112,7 +112,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
                   </ListItemIcon>
                   <ListItemText
                     data-testid="top-level"
-                    primary={`Domínio de topo: ${country.topLevelDomain}`}
+                    primary={`Domínio de topo: ${country.topLevelDomains}`}
                   />
                 </ListItem>
               </List>

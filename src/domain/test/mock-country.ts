@@ -8,5 +8,5 @@ export const mockCountry = (): Country => ({
   flag: faker.internet.url(),
   area: faker.random.number(),
   population: faker.random.number(),
-  topLevelDomain: faker.random.word(),
+  topLevelDomains: faker.random.word(),
 });

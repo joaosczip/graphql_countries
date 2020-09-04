@@ -87,7 +87,7 @@ describe("Country", () => {
     expect(
       screen.getByTestId("top-level").querySelector("span")
     ).toHaveTextContent(
-      `Domínio de topo: ${showCountrySpy.country.topLevelDomain}`
+      `Domínio de topo: ${showCountrySpy.country.topLevelDomains}`
     );
   });
   it("should redirect to Home on error", async () => {
@@ -139,7 +139,7 @@ describe("Country", () => {
       String(showCountrySpy.country.area)
     );
     expect(screen.getByTestId("top-level-input")).toHaveValue(
-      showCountrySpy.country.topLevelDomain
+      showCountrySpy.country.topLevelDomains
     );
   });
   it.skip("should update the country info", async () => {
@@ -226,6 +226,6 @@ describe("Country", () => {
     );
     expect(
       screen.getByTestId("top-level").querySelector("span")
-    ).toHaveTextContent(`Domínio de topo: ${newCountry.topLevelDomain}`);
+    ).toHaveTextContent(`Domínio de topo: ${newCountry.topLevelDomains}`);
   });
 });

@@ -35,7 +35,7 @@ const mockQueryResult = (
 });
 
 const mockLoadQueryResult = () => {
-  const { id, topLevelDomain, flag, ...country } = mockCountry();
+  const { id, topLevelDomains, flag, ...country } = mockCountry();
   return {
     data: {
       Country: [
