@@ -197,4 +197,17 @@ describe("Home", () => {
     expect(names[1]).toHaveTextContent(countries[1].name);
     expect(capitals[1]).toHaveTextContent(countries[1].capital);
   });
+  it("should hides the autocomplete if the search term is empty", async () => {
+    sutFactory();
+    const searchInput = screen.getByTestId("search-input");
+    const search = faker.random.word();
+    userEvent.type(searchInput, search);
+    await waitFor(() => {
+      expect(screen.queryByTestId("autocomplete")).toBeInTheDocument();
+    });
+    userEvent.clear(searchInput);
+    await waitFor(() => {
+      expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
+    });
+  });
 });
