@@ -2,6 +2,7 @@ import React from "react";
 import faker from "faker";
 import configureStore from "redux-mock-store";
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Router } from "react-router-dom";
 import { createMemoryHistory } from "history";
 import { createStore } from "redux";
@@ -141,6 +142,29 @@ describe("Country", () => {
     expect(screen.getByTestId("top-level-input")).toHaveValue(
       showCountrySpy.country.topLevelDomains
     );
+  });
+  it("should close the modal on close button click", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    const countries = mockBasicCountries();
+    countries.push(showCountrySpy.country);
+    const state = mockInitialState(null, showCountrySpy.country, countries);
+    sutFactory({
+      showCountrySpy,
+      state,
+    });
+
+    const updateButton = await screen.findByTestId("update");
+    fireEvent.click(updateButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("update-country")).toBeInTheDocument();
+    });
+
+    userEvent.click(screen.getByTestId("close-modal"));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("form")).not.toBeInTheDocument();
+    });
   });
   it.skip("should update the country info", async () => {
     const showCountrySpy = new ShowCountrySpy();
