@@ -140,6 +140,8 @@ describe("Country", () => {
     expect(screen.getByTestId("top-level-input")).toHaveValue(
       showCountrySpy.country.topLevelDomains
     );
+
+    expect(screen.getByTestId("submit")).toBeEnabled();
   });
   it("should close the modal on close button click", async () => {
     const showCountrySpy = new ShowCountrySpy();
@@ -209,5 +211,53 @@ describe("Country", () => {
     await waitFor(() => {
       expect(screen.queryByTestId("form")).not.toBeInTheDocument();
     });
+  });
+  it("should shows validation message if form values are empty", async () => {
+    sutFactory({});
+
+    const updateButton = await screen.findByTestId("update");
+    fireEvent.click(updateButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("form")).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId("validation")).not.toBeInTheDocument();
+
+    const nameInput = screen.getByTestId("name-input") as HTMLInputElement;
+    const capitalInput = screen.getByTestId(
+      "capital-input"
+    ) as HTMLInputElement;
+    const populationInput = screen.getByTestId(
+      "population-input"
+    ) as HTMLInputElement;
+    const areaInput = screen.getByTestId("area-input") as HTMLInputElement;
+    const topLevelDomainInput = screen.getByTestId(
+      "top-level-input"
+    ) as HTMLInputElement;
+
+    userEvent.clear(nameInput);
+    userEvent.clear(capitalInput);
+    userEvent.clear(populationInput);
+    userEvent.clear(areaInput);
+    userEvent.clear(topLevelDomainInput);
+
+    expect(
+      screen.getByTestId("name-group").querySelector("p")
+    ).toHaveTextContent("Campo obrigatório.");
+    expect(
+      screen.getByTestId("capital-group").querySelector("p")
+    ).toHaveTextContent("Campo obrigatório.");
+    expect(
+      screen.getByTestId("population-group").querySelector("p")
+    ).toHaveTextContent("Campo obrigatório.");
+    expect(
+      screen.getByTestId("area-group").querySelector("p")
+    ).toHaveTextContent("Campo obrigatório.");
+    expect(
+      screen.getByTestId("top-level-group").querySelector("p")
+    ).toHaveTextContent("Campo obrigatório.");
+
+    expect(screen.getByTestId("submit")).toBeDisabled();
   });
 });
