@@ -14,6 +14,8 @@ import {
   FindCountriesSpy,
 } from "@/presentation/test";
 
+jest.useFakeTimers();
+
 type Sut = {
   loadCountriesSpy: LoadCountriesSpy;
   findCountriesSpy: FindCountriesSpy;
@@ -157,6 +159,17 @@ describe("Home", () => {
     const errorContainer = screen.queryByTestId("error-alert");
     const closeButton = errorContainer.querySelector("button");
     userEvent.click(closeButton);
+    await waitFor(() => {
+      expect(errorContainer).not.toBeInTheDocument();
+    });
+  });
+  it("should close the error alert after 5 seconds", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const error = new Error("Ops");
+    const state = mockInitialState(error, null, loadCountriesSpy.countries);
+    sutFactory(loadCountriesSpy, state);
+    await screen.findByTestId("countries-container");
+    const errorContainer = screen.queryByTestId("error-alert");
     await waitFor(() => {
       expect(errorContainer).not.toBeInTheDocument();
     });
