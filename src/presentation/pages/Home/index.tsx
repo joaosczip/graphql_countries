@@ -74,6 +74,7 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
     }
 
     if (!Boolean(searchTerm)) {
+      setSearchItems([]);
       return;
     }
     handleSearchCountries();

@@ -79,9 +79,10 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
               <AutoComplete data-testid="autocomplete">
                 <CardContent>
                   <SearchList data-testid="search-list">
-                    {searchList.map(({ flag, name, capital }) => (
+                    {searchList.map(({ id, flag, name, capital }) => (
                       <>
                         <ListItem
+                          key={id}
                           className={classes.listItem}
                           alignItems="flex-start"
                         >
