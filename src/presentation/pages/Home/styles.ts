@@ -5,7 +5,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 10vh;
+  top: 24px;
 `;
 
 export const CountriesContainer = styled(InfiniteScroll)`

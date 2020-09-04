@@ -77,7 +77,7 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
                 "data-testid": "search-input",
               }}
             />
-            {searchList.length && (
+            {searchList.length ? (
               <AutoComplete data-testid="autocomplete">
                 <CardContent>
                   <SearchList data-testid="search-list">
@@ -121,7 +121,7 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
                   </SearchList>
                 </CardContent>
               </AutoComplete>
-            )}
+            ) : null}
           </Search>
         </Toolbar>
       </AppBar>
