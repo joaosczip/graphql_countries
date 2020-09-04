@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import CardContent from "@material-ui/core/CardContent";
-import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
@@ -12,7 +11,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
-import { Container, Search, AutoComplete, SearchList } from "./styles";
+import { Container, Search, AutoComplete, SearchList, Toolbar } from "./styles";
 import { BasicCountry } from "@/domain/models";
 
 const useStyles = makeStyles((theme) => ({
