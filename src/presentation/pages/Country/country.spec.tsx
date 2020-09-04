@@ -234,8 +234,6 @@ describe("Country", () => {
       expect(screen.queryByTestId("form")).toBeInTheDocument();
     });
 
-    expect(screen.queryByTestId("validation")).not.toBeInTheDocument();
-
     const nameInput = screen.getByTestId("name-input") as HTMLInputElement;
     const capitalInput = screen.getByTestId(
       "capital-input"
@@ -271,5 +269,11 @@ describe("Country", () => {
     ).toHaveTextContent("Campo obrigatório.");
 
     expect(screen.getByTestId("submit")).toBeDisabled();
+  });
+  it("should loads with success alert hidden", async () => {
+    sutFactory({});
+    await waitFor(() => {
+      expect(screen.queryByTestId("success")).not.toBeInTheDocument();
+    });
   });
 });
