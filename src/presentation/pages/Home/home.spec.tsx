@@ -102,7 +102,7 @@ describe("Home", () => {
     const container = await screen.findByTestId("countries-container");
     expect(container.children).toHaveLength(0);
 
-    expect(await screen.findByTestId("error-container")).toBeInTheDocument();
+    expect(await screen.findByTestId("error-alert")).toBeInTheDocument();
     expect(await screen.findByTestId("error-message")).toHaveTextContent(
       error.message
     );

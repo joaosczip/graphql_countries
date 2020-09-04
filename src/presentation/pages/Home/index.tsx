@@ -8,11 +8,7 @@ import {
 import { LoadCountries, FindCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
-import {
-  Error as ErrorComponent,
-  ErrorAlert,
-  HeaderBar,
-} from "@/presentation/components";
+import { ErrorAlert, HeaderBar } from "@/presentation/components";
 import { Container, CountriesContainer } from "./styles";
 import {
   selectCountries,
@@ -27,14 +23,13 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<Error>(useSelector(selectError));
   const [defaultLimit] = useState<number>(12);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [searchItems, setSearchItems] = useState<BasicCountry[]>([]);
   const dispatch = useDispatch();
   const countries = useSelector(selectCountries);
   const queryOffset = useSelector(selectQueryOffset);
-  const globalError = useSelector(selectError);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -84,11 +79,6 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
     <>
       <HeaderBar handleSearch={setSearchTerm} searchList={searchItems} />
       <div style={{ position: "relative" }}>
-        {error && (
-          <div>
-            <ErrorComponent error={error} />
-          </div>
-        )}
         <Container data-testid="container">
           <CountriesContainer
             dataLength={countries.length}
@@ -104,9 +94,9 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
             </div>
           </CountriesContainer>
         </Container>
-        {globalError && (
+        {error && (
           <ErrorAlert
-            error={globalError}
+            error={error}
             handleClose={() => dispatch(setCurrentError(error))}
           />
         )}
