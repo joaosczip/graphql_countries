@@ -78,32 +78,41 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
             {searchList.length && (
               <AutoComplete data-testid="autocomplete">
                 <CardContent>
-                  <SearchList>
-                    <ListItem
-                      className={classes.listItem}
-                      alignItems="flex-start"
-                    >
-                      <ListItemAvatar>
-                        <Avatar
-                          alt="Nome do país"
-                          src="https://restcountries.eu/data/bra.svg"
-                        />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary="Brasil"
-                        secondary={
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            style={{ display: "inline" }}
-                            color="textPrimary"
-                          >
-                            Brasília
-                          </Typography>
-                        }
-                      />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
+                  <SearchList data-testid="search-list">
+                    {searchList.map(({ flag, name, capital }) => (
+                      <>
+                        <ListItem
+                          className={classes.listItem}
+                          alignItems="flex-start"
+                        >
+                          <ListItemAvatar>
+                            <Avatar
+                              imgProps={{ title: "search-flag" }}
+                              alt="Nome do país"
+                              src={flag}
+                            />
+                          </ListItemAvatar>
+                          <ListItemText
+                            primary={name}
+                            primaryTypographyProps={{
+                              title: "search-name",
+                            }}
+                            secondary={
+                              <Typography
+                                component="span"
+                                variant="body2"
+                                style={{ display: "inline" }}
+                                color="textPrimary"
+                                title="search-capital"
+                              >
+                                {capital}
+                              </Typography>
+                            }
+                          />
+                        </ListItem>
+                        <Divider variant="inset" component="li" />
+                      </>
+                    ))}
                   </SearchList>
                 </CardContent>
               </AutoComplete>
