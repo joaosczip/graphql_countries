@@ -1,0 +1,41 @@
+stages:
+  - test
+  - build
+  - deploy
+
+services:
+  - docker:dind
+
+test:
+  stage: test
+  image: node:12
+  tags:
+    - docker
+  script:
+    - yarn test:coverage
+  artifacts:
+    paths:
+      - coverage/
+
+build:
+  stage: build
+  image: node:12
+  tags:
+    - docker
+  before_script:
+    - yarn install
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - build/
+
+.job_template: &deploy
+  stage: deploy
+  image: slergberg/aws-deploy
+  tags:
+    - docker
+  script:
+    - aws s3 rm --recursive "s3://${AWS_PRODUCTION_BUCKET}"
+    - aws s3 sync ./build "s3://${AWS_PRODUCTION_BUCKET}"
+  when: on_success
