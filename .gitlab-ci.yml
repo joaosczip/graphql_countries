@@ -30,7 +30,7 @@ build:
     paths:
       - build/
 
-.job_template: &deploy
+deploy:
   stage: deploy
   image: slergberg/aws-deploy
   tags:
