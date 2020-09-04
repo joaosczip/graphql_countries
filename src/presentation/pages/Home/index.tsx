@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setCountries,
-  setCurrentError,
-  setQueryOffset,
-} from "@/presentation/redux/actions";
+import { setCountries, setQueryOffset } from "@/presentation/redux/actions";
 import { LoadCountries, FindCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";

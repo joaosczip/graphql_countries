@@ -9,6 +9,7 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
+import CloseOutlined from "@material-ui/icons/CloseOutlined";
 import {
   selectCurrentCountry,
   selectCountries,
@@ -19,6 +20,9 @@ import { Main, FormContainer, FormTop, FormBottom } from "./styles";
 const useStyles = makeStyles((theme) => ({
   title: {
     marginBottom: 16,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   modal: {
     display: "flex",
@@ -100,14 +104,14 @@ const UpdateCountry: React.FC<Props> = ({ openModal, setOpenModal }) => {
           {country && (
             <Card className={classes.paper}>
               <CardContent>
-                <Typography
-                  title="title"
-                  variant="h4"
-                  component="h4"
-                  className={classes.title}
-                >
-                  {country.name}
-                </Typography>
+                <div className={classes.title}>
+                  <Typography title="title" variant="h4" component="h4">
+                    {country.name}
+                  </Typography>
+                  <Button color="secondary">
+                    <CloseOutlined />
+                  </Button>
+                </div>
                 <FormContainer>
                   <FormTop>
                     <div>

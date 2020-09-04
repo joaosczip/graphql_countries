@@ -118,7 +118,11 @@ const Country: React.FC<Props> = ({ showCountry }) => {
               </List>
             </CardContent>
             <CardActions>
-              <Button onClick={() => setOpenModal(true)} data-testid="update">
+              <Button
+                color="primary"
+                onClick={() => setOpenModal(true)}
+                data-testid="update"
+              >
                 Editar
               </Button>
             </CardActions>
