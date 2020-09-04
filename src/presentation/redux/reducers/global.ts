@@ -8,6 +8,7 @@ export type GlobalState = {
   currentCountry: Country;
   error: Error;
   queryOffset: number;
+  updated: boolean;
 };
 
 const INITAL_STATE: GlobalState = {
@@ -15,6 +16,7 @@ const INITAL_STATE: GlobalState = {
   error: null,
   currentCountry: null,
   queryOffset: 0,
+  updated: false,
 };
 
 const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
@@ -46,6 +48,7 @@ const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
       );
       return {
         ...state,
+        updated: true,
         countries,
         currentCountry: country,
       };
