@@ -58,7 +58,16 @@ describe("Home", () => {
   });
   it("should not calls FindCountries on load", () => {
     const loadCountriesSpy = new LoadCountriesSpy();
-    const state = mockInitialState(null, null, []);
+    const initialState = mockInitialState(null, null, []);
+
+    const state = {
+      global: initialState.global,
+      search: {
+        searchItems: [],
+        searchInput: "",
+      },
+    };
+
     const { findCountriesSpy } = sutFactory(loadCountriesSpy, state);
     expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
     expect(findCountriesSpy.callsCount).toBe(0);
@@ -175,13 +184,21 @@ describe("Home", () => {
     });
   });
   it("should calls FindCountries on search", async () => {
-    const { findCountriesSpy } = sutFactory();
-    const searchInput = screen.getByTestId("search-input");
-    const search = faker.random.word();
-    userEvent.type(searchInput, search);
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const initialState = mockInitialState(null, null, []);
+
+    const state = {
+      global: initialState.global,
+      search: {
+        searchItems: [],
+        searchInput: faker.random.word(),
+      },
+    };
+
+    const { findCountriesSpy } = sutFactory(loadCountriesSpy, state);
     await waitFor(() => {
       expect(findCountriesSpy.params).toEqual({
-        name: search,
+        name: state.search.searchInput,
       });
     });
   });

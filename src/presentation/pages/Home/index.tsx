@@ -16,7 +16,6 @@ import {
   selectError,
   selectSearchInput,
 } from "@/presentation/redux/selectors";
-import { BasicCountry } from "@/domain/models";
 
 type Props = {
   loadCountries: LoadCountries;
