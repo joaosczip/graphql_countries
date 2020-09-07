@@ -76,15 +76,14 @@ const HeaderBar: React.FC = () => {
                 "data-testid": "search-input",
               }}
             />
-            {searchItems.length && (
+            {searchItems.length ? (
               <AutoComplete data-testid="autocomplete">
                 <CardContent>
                   <SearchList data-testid="search-list">
                     {searchItems.map(({ id, flag, name, capital }) => (
-                      <>
+                      <div key={id}>
                         <ListItem
                           data-testid="list-item"
-                          key={id}
                           className={classes.listItem}
                           alignItems="flex-start"
                           onClick={() => history.push(`/country/${id}`)}
@@ -115,12 +114,12 @@ const HeaderBar: React.FC = () => {
                           />
                         </ListItem>
                         <Divider variant="inset" component="li" />
-                      </>
+                      </div>
                     ))}
                   </SearchList>
                 </CardContent>
               </AutoComplete>
-            )}
+            ) : null}
           </Search>
         </Toolbar>
       </AppBar>
