@@ -49,4 +49,17 @@ describe("HeaderBar", () => {
     expect(names[1]).toHaveTextContent(searchItems[1].name);
     expect(capitals[1]).toHaveTextContent(searchItems[1].capital);
   });
+  it("should hides the autocomplete if the search term is empty", async () => {
+    sutFactory({
+      state: {
+        global: initialState.global,
+        search: {
+          searchItems: [],
+          searchInput: "",
+        },
+      },
+    });
+
+    expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
+  });
 });
