@@ -76,11 +76,11 @@ const HeaderBar: React.FC = () => {
                 "data-testid": "search-input",
               }}
             />
-            <AutoComplete data-testid="autocomplete">
-              <CardContent>
-                <SearchList data-testid="search-list">
-                  {searchItems.length &&
-                    searchItems.map(({ id, flag, name, capital }) => (
+            {searchItems.length && (
+              <AutoComplete data-testid="autocomplete">
+                <CardContent>
+                  <SearchList data-testid="search-list">
+                    {searchItems.map(({ id, flag, name, capital }) => (
                       <>
                         <ListItem
                           data-testid="list-item"
@@ -117,9 +117,10 @@ const HeaderBar: React.FC = () => {
                         <Divider variant="inset" component="li" />
                       </>
                     ))}
-                </SearchList>
-              </CardContent>
-            </AutoComplete>
+                  </SearchList>
+                </CardContent>
+              </AutoComplete>
+            )}
           </Search>
         </Toolbar>
       </AppBar>
