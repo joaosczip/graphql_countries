@@ -67,7 +67,7 @@ const Country: React.FC<Props> = ({ showCountry }) => {
       }
     }
     loadCountry();
-  }, [countryId, showCountry, history, dispatch]);
+  }, [countryId, showCountry, history, dispatch, touched]);
 
   const formatNum = (num: number): string =>
     new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 0 }).format(num);
