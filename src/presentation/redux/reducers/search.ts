@@ -21,7 +21,7 @@ const searchReducer = (state = INITIAL_STATE, action): SearchState => {
     case SearchType.SEARCH_ITEMS:
       return {
         ...state,
-        searchItems: [...state.searchItems, ...action.payload],
+        searchItems: [...action.payload],
       };
     default:
       return state;
