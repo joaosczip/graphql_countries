@@ -13,7 +13,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { Container, Search, AutoComplete, SearchList, Toolbar } from "./styles";
-import { BasicCountry } from "@/domain/models";
 import { setSearchInput } from "@/presentation/redux/actions";
 import { selectSearchItems } from "@/presentation/redux/selectors";
 
@@ -58,7 +57,13 @@ const HeaderBar: React.FC = () => {
     <Container>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">GraphQLCountries</Typography>
+          <Typography
+            onClick={() => history.push("/")}
+            data-testid="app-title"
+            variant="h6"
+          >
+            GraphQLCountries
+          </Typography>
           <Search onClick={() => inputRef?.current?.focus()}>
             <div className={classes.searchIcon}>
               <SearchIcon />
