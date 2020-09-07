@@ -107,4 +107,17 @@ describe("HeaderBar", () => {
     userEvent.click(screen.getByTestId("app-title"));
     expect(memoryHistory.location.pathname).toBe(`/`);
   });
+  it("should focus input on search-container click", () => {
+    sutFactory({
+      state: {
+        global: initialState.global,
+        search: {
+          searchItems: [],
+          searchInput: "",
+        },
+      },
+    });
+    userEvent.click(screen.queryByTestId("search-container"));
+    expect(screen.getByTestId("search-input")).toHaveFocus();
+  });
 });

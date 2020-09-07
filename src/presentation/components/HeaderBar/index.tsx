@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderBar: React.FC = () => {
   const classes = useStyles();
-  const inputRef = useRef({} as HTMLInputElement);
+  const inputRef = useRef(document.createElement("input"));
   const history = useHistory();
   const dispatch = useDispatch();
   const searchItems = useSelector(selectSearchItems);
@@ -75,7 +75,10 @@ const HeaderBar: React.FC = () => {
           >
             GraphQLCountries
           </Typography>
-          <Search onClick={() => inputRef?.current?.focus()}>
+          <Search
+            data-testid="search-container"
+            onClick={() => inputRef?.current?.focus()}
+          >
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>

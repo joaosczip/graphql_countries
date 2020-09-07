@@ -32,4 +32,12 @@ describe("SearchReducer", () => {
     const state = searchReducer(initialState, setSearchItems(searchItems));
     expect(state.searchItems).toEqual(searchItems);
   });
+  it("should return the initial state", () => {
+    const initialState = {
+      searchInput: null,
+      searchItems: [],
+    };
+    const state = searchReducer(undefined, { type: "ANOTHER_ACTION" });
+    expect(state).toEqual(initialState);
+  });
 });
