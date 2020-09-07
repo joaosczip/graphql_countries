@@ -77,6 +77,35 @@ describe("Home", () => {
     const spinner = await screen.findByTestId("skeleton");
     expect(spinner).toBeInTheDocument();
   });
+  it("should shows only 3 skeletons on mobile", async () => {
+    const loadCountriesSpy = new LoadCountriesSpy();
+    const findCountriesSpy = new FindCountriesSpy();
+
+    window.matchMedia = jest.fn().mockImplementation((query) => {
+      return {
+        matches: true,
+        media: "",
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+      };
+    });
+
+    render(
+      <Router history={history}>
+        <Provider store={createStore(globalReducer, initialState as any)}>
+          <Home
+            findCountries={findCountriesSpy}
+            loadCountries={loadCountriesSpy}
+          />
+        </Provider>
+      </Router>
+    );
+
+    const skeleton = await screen.findByTestId("skeleton");
+    expect(skeleton).toBeInTheDocument();
+    expect(skeleton.children).toHaveLength(3);
+  });
   it("should renders the correct countries", async () => {
     const loadCountriesSpy = new LoadCountriesSpy();
     const state = mockInitialState(null, null, loadCountriesSpy.countries);
