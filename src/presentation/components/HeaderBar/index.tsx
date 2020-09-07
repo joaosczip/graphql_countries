@@ -58,6 +58,11 @@ const HeaderBar: React.FC = () => {
   const dispatch = useDispatch();
   const searchItems = useSelector(selectSearchItems);
 
+  const handleRedirect = (countryId: string) => {
+    dispatch(setSearchInput(""));
+    history.push(`/country/${countryId}`);
+  };
+
   return (
     <Container>
       <AppBar position="static">
@@ -97,7 +102,7 @@ const HeaderBar: React.FC = () => {
                           data-testid="list-item"
                           className={classes.listItem}
                           alignItems="flex-start"
-                          onClick={() => history.push(`/country/${id}`)}
+                          onClick={() => handleRedirect(id)}
                         >
                           <ListItemAvatar>
                             <Avatar
