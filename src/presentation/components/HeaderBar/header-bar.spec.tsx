@@ -1,10 +1,12 @@
 import faker from "faker";
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HeaderBar from ".";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import HeaderBar from ".";
 import { globalReducer } from "@/presentation/redux/reducers";
 import { mockInitialState } from "@/presentation/test";
 import { mockBasicCountries } from "@/domain/test";
@@ -15,11 +17,14 @@ type SutParams = {
   state?: any;
 };
 
+const history = createMemoryHistory({ initialEntries: ["/"] });
 const sutFactory = ({ state = initialState }: SutParams): void => {
   render(
-    <Provider store={createStore(globalReducer, state as any)}>
-      <HeaderBar />
-    </Provider>
+    <Router history={history}>
+      <Provider store={createStore(globalReducer, state as any)}>
+        <HeaderBar />
+      </Provider>
+    </Router>
   );
 };
 
@@ -59,7 +64,30 @@ describe("HeaderBar", () => {
         },
       },
     });
-
     expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
+  });
+  it("should redirect to the country page on search item click", async () => {
+    const searchState = {
+      searchItems: mockBasicCountries(),
+      searchInput: faker.random.word(),
+    };
+    sutFactory({
+      state: {
+        global: initialState.global,
+        search: searchState,
+      },
+    });
+
+    const searchInput = screen.getByTestId("search-input");
+    const search = faker.random.word();
+    userEvent.type(searchInput, search);
+    await waitFor(() => {
+      expect(screen.queryByTestId("autocomplete")).toBeInTheDocument();
+    });
+    const firstItem = screen.getAllByTestId("list-item")[0];
+    userEvent.click(firstItem);
+    expect(history.location.pathname).toBe(
+      `/country/${searchState.searchItems[0].id}`
+    );
   });
 });

@@ -201,18 +201,4 @@ describe("Home", () => {
       );
     });
   });
-  it.skip("should redirect to the country page on search item click", async () => {
-    const { findCountriesSpy } = sutFactory();
-    const searchInput = screen.getByTestId("search-input");
-    const search = faker.random.word();
-    userEvent.type(searchInput, search);
-    await waitFor(() => {
-      expect(screen.queryByTestId("autocomplete")).toBeInTheDocument();
-    });
-    const firstItem = screen.getAllByTestId("list-item")[0];
-    userEvent.click(firstItem);
-    expect(history.location.pathname).toBe(
-      `/country/${findCountriesSpy.countries[0].id}`
-    );
-  });
 });
