@@ -7,7 +7,8 @@ export const mockInitialState = (
   currentCountry = mockCountry(),
   countries = mockBasicCountries(),
   queryOffset = 0,
-  updated = false
+  updated = false,
+  toucheds = [mockCountry(), mockCountry()]
 ): RootState => ({
   global: {
     error,
@@ -15,6 +16,7 @@ export const mockInitialState = (
     countries,
     queryOffset,
     updated,
+    toucheds,
   },
   search: {
     searchInput: faker.random.word(),

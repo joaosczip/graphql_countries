@@ -8,6 +8,7 @@ describe("GlobalReducer", () => {
       currentCountry: null,
       queryOffset: 0,
       updated: false,
+      toucheds: [],
     };
     const state = globalReducer(undefined, {
       type: "ANOTHER_ACTION",

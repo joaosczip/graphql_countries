@@ -55,6 +55,23 @@ describe("Country", () => {
     });
     expect(showCountrySpy.countryId).toEqual(fakeCountryId);
   });
+  it("should not calls ShowCountry if country is in state", async () => {
+    const showCountrySpy = new ShowCountrySpy();
+    const countries = mockBasicCountries();
+    const country = {
+      ...showCountrySpy.country,
+      id: String(fakeCountryId),
+    };
+    countries.push(country);
+    const state = mockInitialState(null, country, countries, 0, false, [
+      country,
+    ]);
+    sutFactory({
+      showCountrySpy,
+      state,
+    });
+    expect(showCountrySpy.callsCount).toBe(0);
+  });
   it("should wait for the country to load", async () => {
     const showCountrySpy = new ShowCountrySpy();
     showCountrySpy.country = null;
