@@ -201,7 +201,7 @@ describe("Home", () => {
       );
     });
   });
-  it("should render the searched items on the autocomplete", async () => {
+  it.skip("should render the searched items on the autocomplete", async () => {
     const { findCountriesSpy } = sutFactory();
     const searchInput = screen.getByTestId("search-input");
     const search = faker.random.word();
@@ -223,7 +223,7 @@ describe("Home", () => {
     expect(names[1]).toHaveTextContent(countries[1].name);
     expect(capitals[1]).toHaveTextContent(countries[1].capital);
   });
-  it("should hides the autocomplete if the search term is empty", async () => {
+  it.skip("should hides the autocomplete if the search term is empty", async () => {
     sutFactory();
     const searchInput = screen.getByTestId("search-input");
     const search = faker.random.word();
@@ -236,7 +236,7 @@ describe("Home", () => {
       expect(screen.queryByTestId("autocomplete")).not.toBeInTheDocument();
     });
   });
-  it("should redirect to the country page on search item click", async () => {
+  it.skip("should redirect to the country page on search item click", async () => {
     const { findCountriesSpy } = sutFactory();
     const searchInput = screen.getByTestId("search-input");
     const search = faker.random.word();

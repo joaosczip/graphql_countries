@@ -1,3 +1,4 @@
+import faker from "faker";
 import { RootState } from "@/presentation/redux/store";
 import { mockCountry, mockBasicCountries } from "@/domain/test";
 
@@ -14,5 +15,9 @@ export const mockInitialState = (
     countries,
     queryOffset,
     updated,
+  },
+  search: {
+    searchInput: faker.random.word(),
+    searchItems: mockBasicCountries(),
   },
 });
