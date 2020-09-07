@@ -17,6 +17,11 @@ import { setSearchInput } from "@/presentation/redux/actions";
 import { selectSearchItems } from "@/presentation/redux/selectors";
 
 const useStyles = makeStyles((theme) => ({
+  title: {
+    "&:hover": {
+      cursor: "pointer",
+    },
+  },
   searchIcon: {
     padding: theme.spacing(0, 2),
     height: "100%",
@@ -59,6 +64,7 @@ const HeaderBar: React.FC = () => {
         <Toolbar>
           <Typography
             onClick={() => history.push("/")}
+            className={classes.title}
             data-testid="app-title"
             variant="h6"
           >
