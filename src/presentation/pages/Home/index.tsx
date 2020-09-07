@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setCountries, setQueryOffset } from "@/presentation/redux/actions";
+import {
+  setCountries,
+  setQueryOffset,
+  setSearchItems,
+} from "@/presentation/redux/actions";
 import { LoadCountries, FindCountries } from "@/domain/usecases";
 import { CountryCard } from "./components";
 import SkeletonCards from "./components/SkeletonCards";
@@ -10,6 +14,7 @@ import {
   selectCountries,
   selectQueryOffset,
   selectError,
+  selectSearchInput,
 } from "@/presentation/redux/selectors";
 import { BasicCountry } from "@/domain/models";
 
@@ -21,11 +26,10 @@ type Props = {
 const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
   const [error, setError] = useState<Error>(useSelector(selectError));
   const [defaultLimit] = useState<number>(12);
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [searchItems, setSearchItems] = useState<BasicCountry[]>([]);
   const dispatch = useDispatch();
   const countries = useSelector(selectCountries);
   const queryOffset = useSelector(selectQueryOffset);
+  const searchInput = useSelector(selectSearchInput);
 
   const handleLoadCountries = useCallback(
     async (offset = 0) => {
@@ -57,23 +61,23 @@ const Home: React.FC<Props> = ({ loadCountries, findCountries }) => {
   useEffect(() => {
     async function handleSearchCountries() {
       try {
-        const countriesResult = await findCountries.find({ name: searchTerm });
-        setSearchItems([...countriesResult]);
+        const countriesResult = await findCountries.find({ name: searchInput });
+        dispatch(setSearchItems([...countriesResult]));
       } catch (error) {
         setError(error);
       }
     }
 
-    if (!Boolean(searchTerm)) {
-      setSearchItems([]);
+    if (!Boolean(searchInput)) {
+      dispatch(setSearchItems([]));
       return;
     }
     handleSearchCountries();
-  }, [searchTerm, findCountries]);
+  }, [searchInput, findCountries, dispatch]);
 
   return (
     <>
-      <HeaderBar handleSearch={setSearchTerm} searchList={searchItems} />
+      <HeaderBar />
       <div style={{ position: "relative" }}>
         <Container data-testid="container">
           <CountriesContainer

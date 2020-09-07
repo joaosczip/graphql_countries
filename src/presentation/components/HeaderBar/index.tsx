@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useHistory } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import CardContent from "@material-ui/core/CardContent";
@@ -13,6 +14,8 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import { Container, Search, AutoComplete, SearchList, Toolbar } from "./styles";
 import { BasicCountry } from "@/domain/models";
+import { setSearchInput } from "@/presentation/redux/actions";
+import { selectSearchItems } from "@/presentation/redux/selectors";
 
 const useStyles = makeStyles((theme) => ({
   searchIcon: {
@@ -44,15 +47,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type Props = {
-  handleSearch: (term: string) => void;
-  searchList: BasicCountry[];
-};
-
-const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
+const HeaderBar: React.FC = () => {
   const classes = useStyles();
   const inputRef = useRef({} as HTMLInputElement);
   const history = useHistory();
+  const dispatch = useDispatch();
+  const searchItems = useSelector(selectSearchItems);
 
   return (
     <Container>
@@ -66,7 +66,7 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
             <InputBase
               placeholder="Pesquise por um país..."
               inputRef={inputRef}
-              onChange={(e) => handleSearch(e.target.value)}
+              onChange={(e) => dispatch(setSearchInput(e.target.value))}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
@@ -76,11 +76,11 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
                 "data-testid": "search-input",
               }}
             />
-            {searchList.length ? (
-              <AutoComplete data-testid="autocomplete">
-                <CardContent>
-                  <SearchList data-testid="search-list">
-                    {searchList.map(({ id, flag, name, capital }) => (
+            <AutoComplete data-testid="autocomplete">
+              <CardContent>
+                <SearchList data-testid="search-list">
+                  {searchItems.length &&
+                    searchItems.map(({ id, flag, name, capital }) => (
                       <>
                         <ListItem
                           data-testid="list-item"
@@ -117,10 +117,9 @@ const HeaderBar: React.FC<Props> = ({ handleSearch, searchList }) => {
                         <Divider variant="inset" component="li" />
                       </>
                     ))}
-                  </SearchList>
-                </CardContent>
-              </AutoComplete>
-            ) : null}
+                </SearchList>
+              </CardContent>
+            </AutoComplete>
           </Search>
         </Toolbar>
       </AppBar>
