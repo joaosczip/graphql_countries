@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Router } from "react-router-dom";
-import { createMemoryHistory } from "history";
+import { createMemoryHistory, History } from "history";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import HeaderBar from ".";
@@ -15,17 +15,28 @@ const initialState = mockInitialState();
 
 type SutParams = {
   state?: any;
+  memoryHistory?: History;
+};
+
+type Sut = {
+  memoryHistory: History;
 };
 
 const history = createMemoryHistory({ initialEntries: ["/"] });
-const sutFactory = ({ state = initialState }: SutParams): void => {
+const sutFactory = ({
+  state = initialState,
+  memoryHistory = history,
+}: SutParams): Sut => {
   render(
-    <Router history={history}>
+    <Router history={memoryHistory}>
       <Provider store={createStore(globalReducer, state as any)}>
         <HeaderBar />
       </Provider>
     </Router>
   );
+  return {
+    memoryHistory,
+  };
 };
 
 describe("HeaderBar", () => {
@@ -89,5 +100,11 @@ describe("HeaderBar", () => {
     expect(history.location.pathname).toBe(
       `/country/${searchState.searchItems[0].id}`
     );
+  });
+  it("should redirect to home page on app title click", async () => {
+    const history = createMemoryHistory({ initialEntries: ["/countries/123"] });
+    const { memoryHistory } = sutFactory({ memoryHistory: history });
+    userEvent.click(screen.getByTestId("app-title"));
+    expect(memoryHistory.location.pathname).toBe(`/`);
   });
 });
