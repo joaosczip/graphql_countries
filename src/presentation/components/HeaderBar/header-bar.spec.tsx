@@ -9,9 +9,22 @@ import { globalReducer } from "@/presentation/redux/reducers";
 import { mockInitialState } from "@/presentation/test";
 import { mockBasicCountries } from "@/domain/test";
 
+const initialState = mockInitialState();
+
+type SutParams = {
+  state?: any;
+};
+
+const sutFactory = ({ state = initialState }: SutParams): void => {
+  render(
+    <Provider store={createStore(globalReducer, state as any)}>
+      <HeaderBar />
+    </Provider>
+  );
+};
+
 describe("HeaderBar", () => {
   it("should render the searched items on the autocomplete", async () => {
-    const initialState = mockInitialState();
     const state = {
       global: initialState.global,
       search: {
@@ -19,13 +32,7 @@ describe("HeaderBar", () => {
         searchItems: mockBasicCountries(),
       },
     };
-
-    render(
-      <Provider store={createStore(globalReducer, state as any)}>
-        <HeaderBar />
-      </Provider>
-    );
-
+    sutFactory({ state });
     const searchInput = screen.getByTestId("search-input");
     const search = faker.random.word();
     userEvent.type(searchInput, search);
