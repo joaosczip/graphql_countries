@@ -77,7 +77,7 @@ const HeaderBar: React.FC = () => {
           </Typography>
           <Search
             data-testid="search-container"
-            onClick={() => inputRef?.current?.focus()}
+            onClick={() => inputRef.current.focus()}
           >
             <div className={classes.searchIcon}>
               <SearchIcon />
