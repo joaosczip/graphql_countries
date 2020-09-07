@@ -4,6 +4,16 @@ import searchReducer from "./search";
 import { mockBasicCountries } from "@/domain/test";
 
 describe("SearchReducer", () => {
+  it("should retuns the same state if no search action is passed", () => {
+    const initialState = {
+      searchInput: faker.random.word(),
+      searchItems: [],
+    };
+    const state = searchReducer(initialState, {
+      type: "ANOTHER_ACTION",
+    });
+    expect(state).toEqual(initialState);
+  });
   it("should update the state with the search input", () => {
     const initialState = {
       searchInput: null,
