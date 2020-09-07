@@ -5,3 +5,4 @@ export const selectCurrentCountry = (state: RootState) =>
   state.global.currentCountry;
 export const selectQueryOffset = (state: RootState) => state.global.queryOffset;
 export const selectError = (state: RootState) => state.global.error;
+export const selectToucheds = (state: RootState) => state.global.toucheds;

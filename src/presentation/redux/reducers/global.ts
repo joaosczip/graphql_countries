@@ -9,6 +9,7 @@ export type GlobalState = {
   error: Error;
   queryOffset: number;
   updated: boolean;
+  toucheds: Country[];
 };
 
 const INITAL_STATE: GlobalState = {
@@ -17,6 +18,7 @@ const INITAL_STATE: GlobalState = {
   currentCountry: null,
   queryOffset: 0,
   updated: false,
+  toucheds: [],
 };
 
 const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
@@ -51,6 +53,7 @@ const globalReducer = (state = INITAL_STATE, action: Action): GlobalState => {
         updated: true,
         countries,
         currentCountry: country,
+        toucheds: [...[].concat(state.toucheds), country],
       };
     default:
       return state;

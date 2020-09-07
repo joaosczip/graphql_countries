@@ -25,7 +25,10 @@ import {
   setCurrentError,
   setCurrentCountry,
 } from "@/presentation/redux/actions";
-import { selectCurrentCountry } from "@/presentation/redux/selectors";
+import {
+  selectCurrentCountry,
+  selectToucheds,
+} from "@/presentation/redux/selectors";
 import { Container } from "./styles";
 
 type Props = {
@@ -41,10 +44,19 @@ const Country: React.FC<Props> = ({ showCountry }) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const country = useSelector(selectCurrentCountry);
+  const touched = useSelector(selectToucheds);
 
   useEffect(() => {
     async function loadCountry() {
       try {
+        const wasTouched = touched.find(
+          ({ id }) => String(id) === String(countryId)
+        );
+        if (wasTouched) {
+          dispatch(setCurrentCountry(wasTouched));
+          return;
+        }
+
         const queryResult = await showCountry.find(countryId);
         dispatch(setCurrentCountry(queryResult));
       } catch (error) {
